@@ -1,8 +1,6 @@
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-
   // --- Game weights: moeten exact matchen met checkbox "value" tekst ---
-  // 1 = licht, 3 = gemiddeld, 5 = extreem zwaar
   const gameWeights = {
     "Roblox": 1,
     "Minecraft / Terraria": 2,
@@ -20,15 +18,12 @@ document.addEventListener("DOMContentLoaded", () => {
     "Cyberpunk 2077": 5
   };
 
-  // ==========================================================
   // ✅ PRODUCTEN (3 PC’s) — game-gedreven, altijd 1080p
-  // Later hoef je vooral link/prijs aan te passen.
-  // ==========================================================
   const products = {
     ignite: {
       name: "🔥The Ignite🔥",
-      price: "€650,-", // <-- PAS AAN
-      link: "https://replay-pc.eu/goedkope-gaming-pc-rtx-3060-ti", // <-- PAS AAN
+      price: "€650,-",
+      link: "https://replay-pc.eu/goedkope-gaming-pc-rtx-3060-ti",
       fps1080p: [
         "Roblox / Minecraft: 200+ FPS",
         "League of Legends / Rocket League: 180+ FPS",
@@ -42,11 +37,10 @@ document.addEventListener("DOMContentLoaded", () => {
         "Cyberpunk 2077 (High, zonder ray tracing): 70–90 FPS"
       ]
     },
-
     medium: {
       name: "⚡The Medium⚡",
-      price: "€—", // <-- VUL LATER IN
-      link: "https://replay-pc.eu/PLAK-HIER-LINK", // <-- VUL LATER IN
+      price: "€—",
+      link: "https://replay-pc.eu/PLAK-HIER-LINK",
       fps1080p: [
         "Roblox / Minecraft: 200+ FPS",
         "League of Legends / Rocket League: 200+ FPS",
@@ -60,11 +54,10 @@ document.addEventListener("DOMContentLoaded", () => {
         "Cyberpunk 2077 (High, zonder ray tracing): 80–105 FPS"
       ]
     },
-
     highend: {
       name: "👑High-End👑",
-      price: "€—", // <-- VUL LATER IN
-      link: "https://replay-pc.eu/PLAK-HIER-LINK", // <-- VUL LATER IN
+      price: "€—",
+      link: "https://replay-pc.eu/PLAK-HIER-LINK",
       fps1080p: [
         "Roblox / Minecraft: 240+ FPS",
         "League of Legends / Rocket League: 240+ FPS",
@@ -80,7 +73,24 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // --- Helpers ---
+  // --- DOM refs (crash-proof) ---
+  const calcBtn = document.getElementById("calcBtn");
+  const resetBtn = document.getElementById("resetBtn");
+  const pcName = document.getElementById("pcName");
+  const pcPrice = document.getElementById("pcPrice");
+  const pcLink = document.getElementById("pcLink");
+  const pcFps = document.getElementById("pcFps");
+  const emptyState = document.getElementById("emptyState");
+  const result = document.getElementById("result");
+  const gameList = document.getElementById("gameList");
+
+  // Als één van de noodzakelijke elementen ontbreekt: stop netjes (geen white page)
+  const required = [calcBtn, resetBtn, pcName, pcPrice, pcLink, pcFps, emptyState, result, gameList];
+  if (required.some(el => !el)) {
+    console.warn("Replay tool: een of meerdere elementen missen (check ids).");
+    return;
+  }
+
   function getCheckedGames() {
     return Array.from(document.querySelectorAll('#gameList input[type="checkbox"]'))
       .filter(i => i.checked)
@@ -95,74 +105,45 @@ document.addEventListener("DOMContentLoaded", () => {
     return max;
   }
 
-  // ==========================================================
-  // ✅ LOGICA (ALLEEN GAME-GEDREVEN, 1080p)
-  // - maxWeight 1–2  => Ignite
-  // - maxWeight 3–4  => Medium
-  // - maxWeight 5    => High-End
-  //
-  // (Dus: “lichte games vooral” -> Ignite,
-  //       “mix middelmatig” -> Medium,
-  //       “heel zwaar” -> High-End)
-  // ==========================================================
+  // ✅ LOGICA: alleen game-gedreven
   function chooseProduct(selectedGames){
     const maxWeight = getMaxWeight(selectedGames);
-
     if (maxWeight <= 2) return products.ignite;
     if (maxWeight <= 4) return products.medium;
-    return products.highend; // maxWeight 5
+    return products.highend;
   }
 
   function renderProduct(product){
-    // Naam / prijs / link
-    document.getElementById("pcName").textContent = product.name;
-    document.getElementById("pcPrice").textContent = product.price;
+    pcName.textContent = product.name;
+    pcPrice.textContent = product.price;
 
-    const pcLink = document.getElementById("pcLink");
     pcLink.href = product.link;
     pcLink.textContent = `Bekijk ${product.name}`;
 
-    // FPS lijst
-    const fpsUl = document.getElementById("pcFps");
-    fpsUl.innerHTML = "";
+    pcFps.innerHTML = "";
     product.fps1080p.forEach(line => {
       const li = document.createElement("li");
       li.textContent = line;
-      fpsUl.appendChild(li);
+      pcFps.appendChild(li);
     });
 
-    // Show/Hide
-    document.getElementById("emptyState").style.display = "none";
-    document.getElementById("result").style.display = "block";
+    emptyState.style.display = "none";
+    result.style.display = "block";
   }
-
-  // --- Events ---
-  const calcBtn = document.getElementById("calcBtn");
-  const resetBtn = document.getElementById("resetBtn");
 
   calcBtn.addEventListener("click", () => {
     const games = getCheckedGames();
-
     if (games.length === 0) {
       alert("Selecteer minimaal 1 game om een advies te krijgen.");
       return;
     }
-
-    const product = chooseProduct(games);
-    renderProduct(product);
+    renderProduct(chooseProduct(games));
   });
 
   resetBtn.addEventListener("click", () => {
     document.querySelectorAll('#gameList input[type="checkbox"]').forEach(i => i.checked = false);
-    document.getElementById("result").style.display = "none";
-    document.getElementById("emptyState").style.display = "block";
+    result.style.display = "none";
+    emptyState.style.display = "block";
   });
-
-  // ==========================================================
-  // 🔥 Later een 4e PC toevoegen:
-  // 1) Voeg in products een nieuw blok toe, bijv. products.ultra = { ... }
-  // 2) Pas chooseProduct() aan (extra if-regel op maxWeight)
-  // ==========================================================
-
 });
 </script>
