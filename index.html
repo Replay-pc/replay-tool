@@ -1,0 +1,253 @@
+<!-- Replay PC's - Game Picker -> Recommendation (The Ignite) -->
+<div class="rpc-wrap">
+  <h2>Welke Game PC Past Bij Jou?</h2>
+  <p class="rpc-sub">
+    Vink je games aan en kies je gewenste prestaties. Op basis daarvan zie je meteen welke PC bij jou past.
+  </p>
+
+  <div class="rpc-grid">
+    <!-- LEFT: Game checkboxes -->
+    <div class="rpc-card">
+      <h3>1) Welke games wil je spelen?</h3>
+      <p class="rpc-help">Kies alles wat je speelt. We baseren het advies op de zwaarste geselecteerde game.</p>
+
+      <div class="rpc-checklist" id="gameList">
+        <div class="rpc-section-title">Populaire games</div>
+        <label class="rpc-check"><input type="checkbox" value="Roblox"> Roblox</label>
+        <label class="rpc-check"><input type="checkbox" value="Minecraft"> Minecraft</label>
+        <label class="rpc-check"><input type="checkbox" value="Fortnite"> Fortnite</label>
+        <label class="rpc-check"><input type="checkbox" value="GTA V"> GTA V</label>
+        <label class="rpc-check"><input type="checkbox" value="Call of Duty / Warzone"> Call of Duty / Warzone</label>
+        <label class="rpc-check"><input type="checkbox" value="Valorant"> Valorant</label>
+        <label class="rpc-check"><input type="checkbox" value="Rocket League"> Rocket League</label>
+        <label class="rpc-check"><input type="checkbox" value="Apex Legends"> Apex Legends</label>
+        <label class="rpc-check"><input type="checkbox" value="League of Legends"> League of Legends</label>
+      </div>
+
+      <div class="rpc-divider"></div>
+
+      <h3>2) Kies je prestaties</h3>
+      <label class="rpc-label" for="preset">Resolutie & instellingen</label>
+      <select id="preset" class="rpc-select">
+        <option value="1080_standard">1080p – Standaard instellingen</option>
+        <option value="1080_high">1080p – Hoge instellingen</option>
+        <option value="1440_high">1440p – Hoge instellingen</option>
+        <option value="max_futureproof">Max prestaties / Future-proof</option>
+      </select>
+
+      <button class="rpc-btn" id="calcBtn">Toon mijn beste PC</button>
+
+      <p class="rpc-mini">
+        <strong>Let op:</strong> dit advies is gebaseerd op je games + preset. Voor streaming of ultra settings kunnen we je ook persoonlijk helpen.
+      </p>
+    </div>
+
+    <!-- RIGHT: Result -->
+    <div class="rpc-card">
+      <h3>Jouw advies</h3>
+
+      <div class="rpc-result" id="result" style="display:none;">
+        <div class="rpc-badge">Aanbevolen voor jouw selectie</div>
+        <h4 class="rpc-title" id="pcName">🔥The Ignite🔥</h4>
+
+        <p id="pcReason" class="rpc-reason"></p>
+
+        <div class="rpc-highlight" id="pcSummary"></div>
+
+        <h5 class="rpc-h5">🧩 Specificaties</h5>
+        <ul class="rpc-specs" id="pcSpecs"></ul>
+
+        <h5 class="rpc-h5">🎯 Verwachte prestaties (FPS)</h5>
+        <ul class="rpc-specs" id="pcFps"></ul>
+
+        <div class="rpc-actions">
+          <a id="pcLink" class="rpc-link" href="https://replay-pc.eu/goedkope-gaming-pc-rtx-3060-ti" target="_blank" rel="noopener">
+            Bekijk 🔥The Ignite🔥
+          </a>
+          <button class="rpc-btn-alt" id="resetBtn" type="button">Reset</button>
+        </div>
+
+        <p class="rpc-note">
+          Twijfel je? Stuur ons je games + budget, dan adviseren we persoonlijk.
+        </p>
+      </div>
+
+      <div class="rpc-empty" id="emptyState">
+        <p class="rpc-empty-title">Selecteer je games en klik op “Toon mijn beste PC”.</p>
+        <p class="rpc-empty-sub">Dan krijg je direct een passend advies.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .rpc-wrap{max-width:1100px;margin:0 auto;padding:18px;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;}
+  .rpc-sub{opacity:.9;margin-top:6px}
+  .rpc-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;margin-top:14px}
+  .rpc-card{border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:16px;background:#0f1115;color:#e9eef5;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  .rpc-card h3{margin:0 0 10px 0}
+  .rpc-help{margin:0 0 12px 0;opacity:.85;font-size:14px}
+  .rpc-section-title{margin:10px 0 8px 0;font-weight:800;opacity:.95}
+  .rpc-checklist{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px}
+  .rpc-check{display:flex;gap:10px;align-items:center;font-size:14px;opacity:.95}
+  .rpc-check input{transform:scale(1.1)}
+  .rpc-divider{height:1px;background:rgba(255,255,255,.12);margin:14px 0}
+  .rpc-label{display:block;margin:10px 0 6px 0;font-weight:700}
+  .rpc-select{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:#151a22;color:#e9eef5}
+  .rpc-btn{width:100%;margin-top:12px;padding:12px 14px;border:none;border-radius:12px;background:#ff3b3b;color:#fff;font-weight:900;cursor:pointer}
+  .rpc-btn:hover{filter:brightness(.95)}
+  .rpc-mini{margin-top:12px;opacity:.85;font-size:13px;line-height:1.4}
+
+  .rpc-result{margin-top:10px;padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#121826}
+  .rpc-badge{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(255,59,59,.18);color:#ff8b8b;font-weight:900;font-size:12px;margin-bottom:10px}
+  .rpc-title{margin:6px 0 6px 0;font-size:20px}
+  .rpc-reason{opacity:.92;margin:8px 0 10px 0;line-height:1.55}
+  .rpc-highlight{padding:12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);line-height:1.55}
+  .rpc-h5{margin:14px 0 8px 0;font-size:14px}
+  .rpc-specs{margin:8px 0 0 18px;opacity:.95;line-height:1.5}
+  .rpc-actions{display:flex;gap:10px;margin-top:14px;align-items:center}
+  .rpc-link{flex:1;text-align:center;padding:12px 14px;border-radius:12px;background:#2b3344;color:#fff;text-decoration:none;font-weight:900}
+  .rpc-link:hover{filter:brightness(.95)}
+  .rpc-btn-alt{padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:transparent;color:#fff;font-weight:900;cursor:pointer}
+
+  .rpc-note{margin-top:12px;opacity:.85;font-size:13px;line-height:1.45}
+  .rpc-empty{padding:14px;border-radius:12px;border:1px dashed rgba(255,255,255,.18);background:rgba(255,255,255,.02)}
+  .rpc-empty-title{margin:0 0 4px 0;font-weight:800}
+  .rpc-empty-sub{margin:0;opacity:.85}
+
+  @media (max-width: 900px){
+    .rpc-grid{grid-template-columns:1fr}
+    .rpc-checklist{grid-template-columns:1fr}
+  }
+</style>
+
+<script>
+  // Labels
+  const presetLabels = {
+    "1080_standard":"1080p – Standaard instellingen",
+    "1080_high":"1080p – Hoge instellingen",
+    "1440_high":"1440p – Hoge instellingen",
+    "max_futureproof":"Max prestaties / Future-proof"
+  };
+
+  // Zwaarte-indicatie voor “persoonlijke reden” (alleen tekst, geen productkeuze omdat je 1 model hebt)
+  const gameWeights = {
+    "Roblox": 1,
+    "Minecraft": 2,
+    "League of Legends": 2,
+    "Valorant": 3,
+    "Rocket League": 3,
+    "Fortnite": 4,
+    "GTA V": 4,
+    "Apex Legends": 4,
+    "Call of Duty / Warzone": 5
+  };
+
+  // Productdata (The Ignite)
+  const product = {
+    name: "🔥The Ignite🔥",
+    link: "https://replay-pc.eu/goedkope-gaming-pc-rtx-3060-ti",
+    summary:
+      "Het ideale instapmodel voor ouderen en beginnende gamers die een betrouwbare en betaalbare gaming PC zoeken. " +
+      "Geen technische kennis nodig: volledig voorbereid, getest en ingesteld. Aansluiten en direct gebruiken — geen gedoe.",
+    specs: [
+      "CPU: Intel Core i5-12400F (12e gen, 6 cores)",
+      "GPU: MSI GeForce RTX 3060 Ti",
+      "RAM: 16GB DDR4",
+      "Opslag: 500GB M.2 NVMe SSD",
+      "OS: Windows 11 Pro (geïnstalleerd & geactiveerd)",
+      "Behuizing: Montech Sky Two White (fishtank design met glas)",
+      "Voeding: Degelijke voeding (geschikt voor deze configuratie)"
+    ],
+    fps: [
+      "Fortnite (Performance Mode): ± 160–240 FPS",
+      "Fortnite (High settings): ± 120–160 FPS",
+      "GTA V (High settings): ± 120–140 FPS",
+      "Warzone / Call of Duty (Medium/High): ± 95–115 FPS",
+      "Minecraft / Roblox: soepel speelbaar (200+ FPS)"
+    ]
+  };
+
+  function getCheckedGames() {
+    return Array.from(document.querySelectorAll('#gameList input[type="checkbox"]'))
+      .filter(i => i.checked)
+      .map(i => i.value);
+  }
+
+  function getHeaviestGame(games){
+    if (!games.length) return null;
+    return games.reduce((a,b)=>{
+      const wa = gameWeights[a] || 0;
+      const wb = gameWeights[b] || 0;
+      return wb > wa ? b : a;
+    }, games[0]);
+  }
+
+  function presetNote(preset){
+    if (preset === "1080_standard") return "Prima keuze voor soepel gamen zonder onnodige kosten.";
+    if (preset === "1080_high") return "Ideaal als je mooie graphics wilt met goede FPS.";
+    if (preset === "1440_high") return "Voor scherpere beelden en extra detail (afhankelijk van je monitor).";
+    if (preset === "max_futureproof") return "Je kiest voor maximale marge en langer ‘future-proof’ blijven.";
+    return "";
+  }
+
+  function renderResult(selectedGames, preset){
+    // Text + reason
+    const heaviest = getHeaviestGame(selectedGames);
+    const presetText = presetLabels[preset] || preset;
+
+    const reason =
+      `Je selecteerde: ${selectedGames.join(", ")}. ` +
+      `De zwaarste game in jouw lijst is "${heaviest}". ` +
+      `Met jouw keuze (${presetText}) is ${product.name} een veilige en betaalbare match: ` +
+      `sterke prestaties met de RTX 3060 Ti + i5-12400F, en alles is al volledig getest en ingesteld.`;
+
+    document.getElementById("pcName").textContent = product.name;
+    document.getElementById("pcReason").textContent = reason;
+    document.getElementById("pcSummary").textContent = product.summary + " " + presetNote(preset);
+
+    // Specs
+    const specsUl = document.getElementById("pcSpecs");
+    specsUl.innerHTML = "";
+    product.specs.forEach(s => {
+      const li = document.createElement("li");
+      li.textContent = s;
+      specsUl.appendChild(li);
+    });
+
+    // FPS
+    const fpsUl = document.getElementById("pcFps");
+    fpsUl.innerHTML = "";
+    product.fps.forEach(s => {
+      const li = document.createElement("li");
+      li.textContent = s;
+      fpsUl.appendChild(li);
+    });
+
+    // Link
+    const link = document.getElementById("pcLink");
+    link.href = product.link;
+
+    // Show/Hide
+    document.getElementById("emptyState").style.display = "none";
+    document.getElementById("result").style.display = "block";
+  }
+
+  document.getElementById("calcBtn").addEventListener("click", () => {
+    const games = getCheckedGames();
+    const preset = document.getElementById("preset").value;
+
+    if (games.length === 0) {
+      alert("Selecteer minimaal 1 game om een advies te krijgen.");
+      return;
+    }
+    renderResult(games, preset);
+  });
+
+  document.getElementById("resetBtn").addEventListener("click", () => {
+    document.querySelectorAll('#gameList input[type="checkbox"]').forEach(i => i.checked = false);
+    document.getElementById("preset").value = "1080_standard";
+    document.getElementById("result").style.display = "none";
+    document.getElementById("emptyState").style.display = "block";
+  });
+</script>
