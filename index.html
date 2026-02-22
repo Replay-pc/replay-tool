@@ -1,6 +1,16 @@
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  // --- Game weights: moeten exact matchen met checkbox "value" tekst ---
+
+  // --- Preset labels (mag blijven, maar wordt niet gebruikt) ---
+  const presetLabels = {
+    "1080_standard":"1080p – Standaard instellingen",
+    "1080_high":"1080p – Hoge instellingen",
+    "1440_high":"1440p – Hoge instellingen",
+    "max_futureproof":"Max prestaties / Future-proof"
+  };
+  void(presetLabels); // voorkomt "unused" (optioneel)
+
+  // --- Game weights: moet exact matchen met checkbox "value" tekst ---
   const gameWeights = {
     "Roblox": 1,
     "Minecraft / Terraria": 2,
@@ -17,8 +27,9 @@ document.addEventListener("DOMContentLoaded", () => {
     "Hogwarts Legacy": 5,
     "Cyberpunk 2077": 5
   };
+  void(gameWeights); // wordt nu niet gebruikt, maar klaar voor later
 
-  // ✅ PRODUCTEN (3 PC’s) — game-gedreven, altijd 1080p
+  // ✅ PRODUCTEN (NU: 1 PC)
   const products = {
     ignite: {
       name: "🔥The Ignite🔥",
@@ -36,44 +47,10 @@ document.addEventListener("DOMContentLoaded", () => {
         "Hogwarts Legacy (High): 75–95 FPS",
         "Cyberpunk 2077 (High, zonder ray tracing): 70–90 FPS"
       ]
-    },
-    medium: {
-      name: "⚡The Medium⚡",
-      price: "€—",
-      link: "https://replay-pc.eu/PLAK-HIER-LINK",
-      fps1080p: [
-        "Roblox / Minecraft: 200+ FPS",
-        "League of Legends / Rocket League: 200+ FPS",
-        "Fortnite (Performance Mode): 200+ FPS",
-        "Fortnite (High Settings): 140–180 FPS",
-        "GTA V (High): 140–170 FPS",
-        "Apex Legends: 130–170 FPS",
-        "Call of Duty / Warzone: 110–140 FPS",
-        "Red Dead Redemption 2 (High): 95–120 FPS",
-        "Hogwarts Legacy (High): 85–110 FPS",
-        "Cyberpunk 2077 (High, zonder ray tracing): 80–105 FPS"
-      ]
-    },
-    highend: {
-      name: "👑High-End👑",
-      price: "€—",
-      link: "https://replay-pc.eu/PLAK-HIER-LINK",
-      fps1080p: [
-        "Roblox / Minecraft: 240+ FPS",
-        "League of Legends / Rocket League: 240+ FPS",
-        "Fortnite (Performance Mode): 240+ FPS",
-        "Fortnite (High Settings): 170–220 FPS",
-        "GTA V (High): 170–220 FPS",
-        "Apex Legends: 160–220 FPS",
-        "Call of Duty / Warzone: 140–190 FPS",
-        "Red Dead Redemption 2 (High): 120–160 FPS",
-        "Hogwarts Legacy (High): 110–150 FPS",
-        "Cyberpunk 2077 (High, zonder ray tracing): 105–150 FPS"
-      ]
     }
   };
 
-  // --- DOM refs (crash-proof) ---
+  // --- DOM checks (voorkomt wit scherm als een id mist) ---
   const calcBtn = document.getElementById("calcBtn");
   const resetBtn = document.getElementById("resetBtn");
   const pcName = document.getElementById("pcName");
@@ -82,35 +59,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const pcFps = document.getElementById("pcFps");
   const emptyState = document.getElementById("emptyState");
   const result = document.getElementById("result");
-  const gameList = document.getElementById("gameList");
 
-  // Als één van de noodzakelijke elementen ontbreekt: stop netjes (geen white page)
-  const required = [calcBtn, resetBtn, pcName, pcPrice, pcLink, pcFps, emptyState, result, gameList];
+  const required = [calcBtn, resetBtn, pcName, pcPrice, pcLink, pcFps, emptyState, result];
   if (required.some(el => !el)) {
-    console.warn("Replay tool: een of meerdere elementen missen (check ids).");
+    console.warn("Replay tool: een of meerdere elementen missen. Check ids in je HTML.");
     return;
-  }
-
-  function getCheckedGames() {
-    return Array.from(document.querySelectorAll('#gameList input[type="checkbox"]'))
-      .filter(i => i.checked)
-      .map(i => i.value);
-  }
-
-  function getMaxWeight(games){
-    let max = 0;
-    for (const g of games){
-      max = Math.max(max, gameWeights[g] || 0);
-    }
-    return max;
-  }
-
-  // ✅ LOGICA: alleen game-gedreven
-  function chooseProduct(selectedGames){
-    const maxWeight = getMaxWeight(selectedGames);
-    if (maxWeight <= 2) return products.ignite;
-    if (maxWeight <= 4) return products.medium;
-    return products.highend;
   }
 
   function renderProduct(product){
@@ -131,13 +84,20 @@ document.addEventListener("DOMContentLoaded", () => {
     result.style.display = "block";
   }
 
+  // ✅ Advieslogica (NU: altijd Ignite)
+  function chooseProduct(){
+    return products.ignite;
+  }
+
   calcBtn.addEventListener("click", () => {
-    const games = getCheckedGames();
-    if (games.length === 0) {
+    // (game selectie check blijft, maar is niet noodzakelijk voor 1 pc)
+    const selected = Array.from(document.querySelectorAll('#gameList input[type="checkbox"]')).filter(i => i.checked);
+    if (selected.length === 0) {
       alert("Selecteer minimaal 1 game om een advies te krijgen.");
       return;
     }
-    renderProduct(chooseProduct(games));
+
+    renderProduct(chooseProduct());
   });
 
   resetBtn.addEventListener("click", () => {
@@ -145,5 +105,6 @@ document.addEventListener("DOMContentLoaded", () => {
     result.style.display = "none";
     emptyState.style.display = "block";
   });
-});
+
+}); 
 </script>
