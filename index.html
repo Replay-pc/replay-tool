@@ -57,44 +57,34 @@
     </div>
 
     <!-- RIGHT: Result -->
-    <div class="rpc-card">
-      <h3>Jouw advies</h3>
+<div class="rpc-card">
+  <h3>Jouw advies</h3>
 
-      <div class="rpc-result" id="result" style="display:none;">
-        <div class="rpc-badge">Aanbevolen voor jouw selectie</div>
-        <h4 class="rpc-title" id="pcName">🔥The Ignite🔥</h4>
+  <div class="rpc-result" id="result" style="display:none;">
+    <div class="rpc-badge">Aanbevolen voor jouw selectie</div>
 
-        <p id="pcReason" class="rpc-reason"></p>
+    <h4 class="rpc-title" id="pcName">🔥The Ignite🔥</h4>
+    <div class="rpc-price" id="pcPrice">€—</div>
 
-        <div class="rpc-highlight" id="pcSummary"></div>
+    <h5 class="rpc-h5">🎯 Verwachte prestaties (1080p)</h5>
+    <ul class="rpc-specs" id="pcFps"></ul>
 
-        <h5 class="rpc-h5">🧩 Specificaties</h5>
-        <ul class="rpc-specs" id="pcSpecs"></ul>
-
-        <h5 class="rpc-h5">🎯 Verwachte prestaties (FPS)</h5>
-        <ul class="rpc-specs" id="pcFps"></ul>
-
-        <div class="rpc-actions">
-          <a id="pcLink" class="rpc-link" href="https://replay-pc.eu/goedkope-gaming-pc-rtx-3060-ti" target="_blank" rel="noopener">
-            Bekijk 🔥The Ignite🔥
-          </a>
-          <button class="rpc-btn-alt" id="resetBtn" type="button">Reset</button>
-        </div>
-
-        <p class="rpc-note">
-          Twijfel je? Stuur ons je games + budget, dan adviseren we persoonlijk.
-        </p>
-      </div>
-
-      <div class="rpc-empty" id="emptyState">
-        <p class="rpc-empty-title">Selecteer je games en klik op “Toon mijn beste PC”.</p>
-        <p class="rpc-empty-sub">Dan krijg je direct een passend advies.</p>
-      </div>
+    <div class="rpc-actions">
+      <a id="pcLink" class="rpc-link" href="#" target="_blank" rel="noopener">
+        Bekijk deze PC
+      </a>
+      <button class="rpc-btn-alt" id="resetBtn" type="button">Reset</button>
     </div>
+  </div>
+
+  <div class="rpc-empty" id="emptyState">
+    <p class="rpc-empty-title">Selecteer je games en klik op “Toon mijn beste PC”.</p>
+    <p class="rpc-empty-sub">Dan krijg je direct een passend advies.</p>
   </div>
 </div>
 
 <style>
+  .rpc-price{font-size:22px;font-weight:900;margin:6px 0 12px 0;color:#ff3b3b;}
   .rpc-wrap{max-width:1100px;margin:0 auto;padding:18px;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;}
   .rpc-sub{opacity:.9;margin-top:6px}
   .rpc-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;margin-top:14px}
@@ -222,6 +212,9 @@ const gameWeights = {
       `sterke prestaties met de RTX 3060 Ti + i5-12400F, en alles is al volledig getest en ingesteld.`;
 
     document.getElementById("pcName").textContent = product.name;
+    document.getElementById("pcPrice").textContent = product.price;
+    document.getElementById("pcLink").href = product.link;
+    document.getElementById("pcLink").textContent = `Bekijk ${product.name}`;
     document.getElementById("pcReason").textContent = reason;
     document.getElementById("pcSummary").textContent = product.summary + " " + presetNote(preset);
 
