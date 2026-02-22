@@ -1,11 +1,5 @@
 <script>
-  // --- Preset labels (optioneel, handig voor debug/uitbreiding) ---
-  const presetLabels = {
-    "1080_standard":"1080p – Standaard instellingen",
-    "1080_high":"1080p – Hoge instellingen",
-    "1440_high":"1440p – Hoge instellingen",
-    "max_futureproof":"Max prestaties / Future-proof"
-  };
+document.addEventListener("DOMContentLoaded", () => {
 
   // --- Game weights: moeten exact matchen met checkbox "value" tekst ---
   // 1 = licht, 3 = gemiddeld, 5 = extreem zwaar
@@ -27,14 +21,14 @@
   };
 
   // ==========================================================
-  // ✅ PRODUCTEN (3 PC’s)
-  // Nu hoef je later alleen link/prijs aan te passen.
+  // ✅ PRODUCTEN (3 PC’s) — game-gedreven, altijd 1080p
+  // Later hoef je vooral link/prijs aan te passen.
   // ==========================================================
   const products = {
     ignite: {
       name: "🔥The Ignite🔥",
       price: "€650,-", // <-- PAS AAN
-      link: "https://replay-pc.eu/goedkope-gaming-pc-rtx-3060-ti", // <-- PAS AAN (of laat staan)
+      link: "https://replay-pc.eu/goedkope-gaming-pc-rtx-3060-ti", // <-- PAS AAN
       fps1080p: [
         "Roblox / Minecraft: 200+ FPS",
         "League of Legends / Rocket League: 180+ FPS",
@@ -102,43 +96,21 @@
   }
 
   // ==========================================================
-  // ✅ LOGICA: zwaarste game + preset => product tier
+  // ✅ LOGICA (ALLEEN GAME-GEDREVEN, 1080p)
+  // - maxWeight 1–2  => Ignite
+  // - maxWeight 3–4  => Medium
+  // - maxWeight 5    => High-End
   //
-  // Basis op maxWeight:
-  //  - 1–2  => ignite
-  //  - 3–4  => medium
-  //  - 5    => highend
-  //
-  // Preset upgrades:
-  //  - 1080_high: upgrade als maxWeight >=3
-  //  - 1440_high: minimaal medium, en bij >=4 highend
-  //  - max_futureproof: altijd 1 tier omhoog (min medium)
+  // (Dus: “lichte games vooral” -> Ignite,
+  //       “mix middelmatig” -> Medium,
+  //       “heel zwaar” -> High-End)
   // ==========================================================
-  function chooseProduct(selectedGames, preset){
+  function chooseProduct(selectedGames){
     const maxWeight = getMaxWeight(selectedGames);
 
-    // 1) basis tier
-    let tier = "ignite";
-    if (maxWeight <= 2) tier = "ignite";
-    else if (maxWeight <= 4) tier = "medium";
-    else tier = "highend"; // maxWeight 5
-
-    // 2) preset upgrades
-    if (preset === "1080_high") {
-      if (tier === "ignite" && maxWeight >= 3) tier = "medium";
-    }
-
-    if (preset === "1440_high") {
-      if (tier === "ignite") tier = "medium";
-      if (tier === "medium" && maxWeight >= 4) tier = "highend";
-    }
-
-    if (preset === "max_futureproof") {
-      if (tier === "ignite") tier = "medium";
-      else if (tier === "medium") tier = "highend";
-    }
-
-    return products[tier];
+    if (maxWeight <= 2) return products.ignite;
+    if (maxWeight <= 4) return products.medium;
+    return products.highend; // maxWeight 5
   }
 
   function renderProduct(product){
@@ -165,35 +137,32 @@
   }
 
   // --- Events ---
-  document.getElementById("calcBtn").addEventListener("click", () => {
+  const calcBtn = document.getElementById("calcBtn");
+  const resetBtn = document.getElementById("resetBtn");
+
+  calcBtn.addEventListener("click", () => {
     const games = getCheckedGames();
-    const preset = document.getElementById("preset").value;
 
     if (games.length === 0) {
       alert("Selecteer minimaal 1 game om een advies te krijgen.");
       return;
     }
 
-    // debug klaar voor later (niet noodzakelijk)
-    const presetText = presetLabels[preset] || preset;
-    void(presetText);
-
-    const product = chooseProduct(games, preset);
+    const product = chooseProduct(games);
     renderProduct(product);
   });
 
-  document.getElementById("resetBtn").addEventListener("click", () => {
+  resetBtn.addEventListener("click", () => {
     document.querySelectorAll('#gameList input[type="checkbox"]').forEach(i => i.checked = false);
-    document.getElementById("preset").value = "1080_standard";
     document.getElementById("result").style.display = "none";
     document.getElementById("emptyState").style.display = "block";
   });
 
   // ==========================================================
-  // 🔥 Later 2e/3e PC live zetten:
-  // 1) Vervang alleen:
-  //    - products.medium.link + products.medium.price
-  //    - products.highend.link + products.highend.price
-  // 2) Klaar. Logica werkt al.
+  // 🔥 Later een 4e PC toevoegen:
+  // 1) Voeg in products een nieuw blok toe, bijv. products.ultra = { ... }
+  // 2) Pas chooseProduct() aan (extra if-regel op maxWeight)
   // ==========================================================
+
+});
 </script>
