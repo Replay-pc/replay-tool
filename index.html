@@ -34,6 +34,7 @@
 .rpc-tip a{color:#ff8b8b;font-weight:700}
 
 .rpc-empty{padding:14px;border-radius:12px;border:1px dashed rgba(255,255,255,.18);background:rgba(255,255,255,.02)}
+.rpc-empty b{color:#fff}
 
 @media (max-width:900px){
   .rpc-grid{grid-template-columns:1fr}
@@ -44,225 +45,278 @@
 
 <body>
 <div class="rpc-wrap">
-<h2>Welke Game PC Past Bij Jou?</h2>
-<p class="rpc-sub">Vink je games aan en kies je minimale FPS. Advies verschijnt automatisch.</p>
+  <h2>Welke Game PC Past Bij Jou?</h2>
+  <p class="rpc-sub">Vink minimaal 2 games aan en kies je minimale FPS. Advies verschijnt automatisch.</p>
 
-<div class="rpc-grid">
+  <div class="rpc-grid">
 
-<!-- LEFT -->
-<div class="rpc-card">
-<h3>1) Welke games wil je spelen?</h3>
+    <!-- LEFT -->
+    <div class="rpc-card">
+      <h3>1) Welke games wil je spelen?</h3>
+      <p class="rpc-help">Kies <b>minimaal 2</b> games. We baseren het advies op de zwaarste games in jouw selectie.</p>
 
-<div class="rpc-checklist" id="gameList">
-<div class="rpc-section-title">Licht</div>
-<label class="rpc-check"><input type="checkbox" value="Roblox"> Roblox</label>
-<label class="rpc-check"><input type="checkbox" value="Minecraft"> Minecraft</label>
-<label class="rpc-check"><input type="checkbox" value="League of Legends"> League of Legends</label>
-<label class="rpc-check"><input type="checkbox" value="Rocket League"> Rocket League</label>
-<label class="rpc-check"><input type="checkbox" value="Valorant"> Valorant</label>
-<label class="rpc-check"><input type="checkbox" value="Fortnite"> Fortnite</label>
-<label class="rpc-check"><input type="checkbox" value="Apex Legends"> Apex Legends</label>
-<label class="rpc-check"><input type="checkbox" value="GTA V"> GTA V / FiveM</label>
+      <div class="rpc-checklist" id="gameList">
+        <div class="rpc-section-title">Licht (instap)</div>
+        <label class="rpc-check"><input type="checkbox" value="Roblox"> Roblox</label>
+        <label class="rpc-check"><input type="checkbox" value="Minecraft"> Minecraft</label>
+        <label class="rpc-check"><input type="checkbox" value="League of Legends"> League of Legends</label>
+        <label class="rpc-check"><input type="checkbox" value="Rocket League"> Rocket League</label>
 
-<div class="rpc-section-title">Zwaarder</div>
-<label class="rpc-check"><input type="checkbox" value="Call of Duty"> Call of Duty / Warzone</label>
-<label class="rpc-check"><input type="checkbox" value="Red Dead Redemption 2"> Red Dead Redemption 2</label>
-<label class="rpc-check"><input type="checkbox" value="Hogwarts Legacy"> Hogwarts Legacy</label>
-<label class="rpc-check"><input type="checkbox" value="Cyberpunk 2077"> Cyberpunk 2077</label>
-</div>
+        <div class="rpc-section-title">Gemiddeld (populair)</div>
+        <label class="rpc-check"><input type="checkbox" value="Fortnite"> Fortnite</label>
+        <label class="rpc-check"><input type="checkbox" value="Valorant"> Valorant</label>
+        <label class="rpc-check"><input type="checkbox" value="GTA V"> GTA V / FiveM</label>
+        <label class="rpc-check"><input type="checkbox" value="Apex Legends"> Apex Legends</label>
 
-<h3 style="margin-top:18px;">2) Minimale FPS</h3>
-<div class="rpc-fps-pick" id="fpsPick">
-<label class="rpc-radio"><input type="radio" name="minFps" value="60" checked> 60+ FPS</label>
-<label class="rpc-radio"><input type="radio" name="minFps" value="100"> 100+ FPS</label>
-<label class="rpc-radio"><input type="radio" name="minFps" value="144"> 144+ FPS</label>
-</div>
-</div>
+        <div class="rpc-section-title">Zwaar / extreem zwaar</div>
+        <label class="rpc-check"><input type="checkbox" value="Call of Duty / Warzone"> Call of Duty / Warzone</label>
+        <label class="rpc-check"><input type="checkbox" value="Red Dead Redemption 2"> Red Dead Redemption 2</label>
+        <label class="rpc-check"><input type="checkbox" value="Hogwarts Legacy"> Hogwarts Legacy</label>
+        <label class="rpc-check"><input type="checkbox" value="Cyberpunk 2077"> Cyberpunk 2077</label>
+      </div>
 
-<!-- RIGHT -->
-<div class="rpc-card">
-<h3>Jouw advies</h3>
+      <h3 style="margin-top:18px;">2) Minimale FPS</h3>
+      <div class="rpc-fps-pick" id="fpsPick">
+        <label class="rpc-radio"><input type="radio" name="minFps" value="60" checked> 60+ FPS</label>
+        <label class="rpc-radio"><input type="radio" name="minFps" value="100"> 100+ FPS</label>
+        <label class="rpc-radio"><input type="radio" name="minFps" value="144"> 144+ FPS</label>
+      </div>
+    </div>
 
-<div class="rpc-result" id="result" style="display:none;">
-<div class="rpc-badge">Aanbevolen systeem</div>
+    <!-- RIGHT -->
+    <div class="rpc-card">
+      <h3>Jouw advies</h3>
 
-<h4 class="rpc-title" id="pcName"></h4>
-<div class="rpc-price" id="pcPrice"></div>
+      <div class="rpc-result" id="result" style="display:none;">
+        <div class="rpc-badge">Aanbevolen systeem</div>
 
-<div class="rpc-why" id="whyText"></div>
+        <h4 class="rpc-title" id="pcName"></h4>
+        <div class="rpc-price" id="pcPrice"></div>
 
-<h5 class="rpc-h5">🎯 Verwachte prestaties (1080p)</h5>
-<ul class="rpc-specs" id="pcFps"></ul>
+        <div class="rpc-why" id="whyText"></div>
 
-<div class="rpc-actions">
-<a id="pcLink" class="rpc-link" href="#" target="_blank">Bekijk deze PC</a>
-</div>
+        <h5 class="rpc-h5">🎯 Verwachte prestaties (1080p)</h5>
+        <ul class="rpc-specs" id="pcFps"></ul>
 
-<p class="rpc-tip">
-💡 Twijfel je? Gebruik ons
-<a href="https://replay-pc.eu/contactformulier" target="_blank">contactformulier</a>
-voor een persoonlijk advies op maat.
-</p>
-</div>
+        <div class="rpc-actions">
+          <a id="pcLink" class="rpc-link" href="#" target="_blank" rel="noopener">Bekijk deze PC</a>
+        </div>
 
-<div class="rpc-empty" id="emptyState">
-Selecteer je games en minimale FPS om advies te krijgen.
-</div>
+        <p class="rpc-tip">
+          💡 Twijfel je? Gebruik ons
+          <a href="https://replay-pc.eu/contactformulier" target="_blank" rel="noopener">contactformulier</a>
+          voor een persoonlijk advies op maat.
+        </p>
+      </div>
 
-</div>
-</div>
+      <div class="rpc-empty" id="emptyState">
+        Selecteer <b>minimaal 2 games</b> en kies je minimale FPS om advies te krijgen.
+      </div>
+
+    </div>
+  </div>
 </div>
 
 <script>
 document.addEventListener("DOMContentLoaded",()=>{
 
-const gameWeights={
-"Roblox":1,"Minecraft":1,"League of Legends":1,"Rocket League":1,
-"Valorant":1,"Fortnite":1,"Apex Legends":1,"GTA V":1,
-"Call of Duty":2,"Red Dead Redemption 2":2,
-"Hogwarts Legacy":3,"Cyberpunk 2077":3
-};
+  // 1 = licht, 2 = gemiddeld, 3 = zwaar, 4 = extreem zwaar
+  // (Deze verdeling voorkomt te snelle upsell: Apex/GTA/Fortnite blijven “gemiddeld”.)
+  const gameWeights = {
+    // Licht
+    "Roblox": 1,
+    "Minecraft": 1,
+    "League of Legends": 1,
+    "Rocket League": 1,
 
-const products={
-budget:{
-name:"💸 Budget 60FPS",
-price:"€—",
-link:"#",
-fps:[
-  "Esports games: 120–200 FPS",
-  "Warzone: 60–90 FPS",
-  "RDR2: 55–75 FPS"
-]
-},
-ignite:{
-name:"🔥The Ignite🔥",
-price:"€650,-",
-link:"https://replay-pc.eu/goedkope-gaming-pc-rtx-3060-ti",
-fps:[
-  "Roblox / Minecraft: 200+ FPS",
-  "League of Legends / Rocket League: 180+ FPS",
-  "Fortnite (High Settings): 120–160 FPS",
-  "GTA V (High): 120–140 FPS",
-  "Apex Legends: 110–140 FPS",
-  "Call of Duty / Warzone: 95–115 FPS",
-  "Red Dead Redemption 2 (High): 80–100 FPS",
-  "Hogwarts Legacy (High): 75–95 FPS",
-  "Cyberpunk 2077 (High, zonder ray tracing): 70–90 FPS"
-]
-},
-highend:{
-name:"👑 High-End",
-price:"€—",
-link:"#",
-fps:[
-  "Esports: 240+ FPS",
-  "Warzone: 140–190 FPS",
-  "RDR2: 120–160 FPS",
-  "Cyberpunk: 105–150 FPS"
-]
-}
-};
+    // Gemiddeld
+    "Fortnite": 2,
+    "Valorant": 2,
+    "GTA V": 2,
+    "Apex Legends": 2,
 
-function getCheckedGames(){
-  return [...document.querySelectorAll('#gameList input:checked')].map(i=>i.value);
-}
+    // Zwaar
+    "Call of Duty / Warzone": 3,
+    "Red Dead Redemption 2": 3,
 
-function getMinFps(){
-  return parseInt(document.querySelector('input[name="minFps"]:checked').value, 10);
-}
+    // Extreem zwaar
+    "Hogwarts Legacy": 4,
+    "Cyberpunk 2077": 4
+  };
 
-function getMaxWeight(games){
-  let max=0;
-  games.forEach(g=>max=Math.max(max,gameWeights[g]||0));
-  return max;
-}
-
-function getHeaviestGame(games){
-  if(!games.length) return null;
-  let best=games[0];
-  let bestW=gameWeights[best]||0;
-  games.forEach(g=>{
-    const w=gameWeights[g]||0;
-    if(w>bestW){ best=g; bestW=w; }
-  });
-  return best;
-}
-
-function chooseProduct(games,fps){
-  const weight=getMaxWeight(games);
-
-  if(weight===1){
-    if(fps===60) return products.budget;
-    return products.ignite;
-  }
-  if(weight===2){
-    if(fps>=144) return products.highend;
-    return products.ignite;
-  }
-  if(weight===3){
-    if(fps>=144) return products.highend;
-    return products.ignite;
-  }
-  return products.ignite;
-}
-
-function render(product,games,fps){
-  document.getElementById("pcName").textContent=product.name;
-  document.getElementById("pcPrice").textContent=product.price;
-  document.getElementById("pcLink").href=product.link;
-  document.getElementById("pcLink").textContent=`Bekijk ${product.name}`;
-
-  const weight=getMaxWeight(games);
-  const zwaarsteGame=getHeaviestGame(games);
-
-  let categorie="Licht";
-  if(weight===2) categorie="Zwaarder";
-  if(weight===3) categorie="Zwaar";
-
-  let reden="";
-  if(product===products.budget){
-    reden=`Omdat je vooral lichte games hebt gekozen en 60+ FPS voldoende vindt, adviseren we dit budgetmodel.`;
-  } else if(product===products.ignite){
-    if(weight===1){
-      reden=`Omdat je ${fps}+ FPS wilt (voor extra soepele gameplay) adviseren we 🔥The Ignite🔥.`;
-    } else {
-      reden=`Omdat je zwaardere games hebt gekozen (zwaarste: ${zwaarsteGame}) en je ${fps}+ FPS wilt, adviseren we 🔥The Ignite🔥 voor stabielere prestaties.`;
+  const products = {
+    budget: {
+      name: "💸 Budget 60FPS",
+      price: "€—",
+      link: "#",
+      fps: [
+        "Esports games (LoL/Valorant/RL): 120–200 FPS",
+        "Fortnite / Apex: 80–130 FPS (settings afhankelijk)",
+        "Warzone: 60–90 FPS (settings afhankelijk)",
+        "RDR2: 55–75 FPS (mix settings)"
+      ]
+    },
+    ignite: {
+      name: "🔥The Ignite🔥",
+      price: "€650,-",
+      link: "https://replay-pc.eu/goedkope-gaming-pc-rtx-3060-ti",
+      fps: [
+        "Roblox / Minecraft: 200+ FPS",
+        "League of Legends / Rocket League: 180+ FPS",
+        "Fortnite (High Settings): 120–160 FPS",
+        "GTA V (High): 120–140 FPS",
+        "Apex Legends: 110–140 FPS",
+        "Call of Duty / Warzone: 95–115 FPS",
+        "Red Dead Redemption 2 (High): 80–100 FPS",
+        "Hogwarts Legacy (High): 75–95 FPS",
+        "Cyberpunk 2077 (High, zonder ray tracing): 70–90 FPS"
+      ]
+    },
+    highend: {
+      name: "👑 High-End",
+      price: "€—",
+      link: "#",
+      fps: [
+        "Esports (LoL/Valorant/RL): 240+ FPS",
+        "Fortnite / Apex: 160–240 FPS",
+        "Warzone: 140–190 FPS",
+        "RDR2: 120–160 FPS",
+        "Cyberpunk: 105–150 FPS"
+      ]
     }
-  } else if(product===products.highend){
-    reden=`Omdat je ${fps}+ FPS wilt én je selectie zwaardere games bevat (zwaarste: ${zwaarsteGame}), adviseren we High-End voor maximale performance.`;
+  };
+
+  function getCheckedGames(){
+    return [...document.querySelectorAll('#gameList input:checked')].map(i=>i.value);
   }
 
-  const extra=`Je selectie: ${games.join(", ")}. Categorie: ${categorie}.`;
-  document.getElementById("whyText").textContent=`${reden} ${extra}`;
+  function getMinFps(){
+    return parseInt(document.querySelector('input[name="minFps"]:checked').value, 10);
+  }
 
-  const ul=document.getElementById("pcFps");
-  ul.innerHTML="";
-  product.fps.forEach(f=>{
-    const li=document.createElement("li");
-    li.textContent=f;
-    ul.appendChild(li);
-  });
+  function getMaxWeight(games){
+    let max=0;
+    games.forEach(g=>max=Math.max(max, gameWeights[g] || 0));
+    return max;
+  }
 
-  document.getElementById("emptyState").style.display="none";
-  document.getElementById("result").style.display="block";
-}
+  // Pak de 2 zwaarste games (op basis van weight). Bij gelijke weight: volgorde selectie.
+  function getTwoHeaviestGames(games){
+    const ranked = games
+      .map((g, idx) => ({ g, w: gameWeights[g] || 0, idx }))
+      .sort((a,b) => (b.w - a.w) || (a.idx - b.idx))
+      .map(x => x.g);
 
-function update(){
-  const games=getCheckedGames();
-  if(!games.length){
+    const unique = [];
+    for (const g of ranked){
+      if (!unique.includes(g)) unique.push(g);
+      if (unique.length === 2) break;
+    }
+    return unique;
+  }
+
+  // GAME-gedreven logica (met minimale FPS als voorkeur)
+  // Doel: NIET te snel opschalen, maar wel opschalen als het “echt moet”.
+  function chooseProduct(games, fps){
+    const maxW = getMaxWeight(games);
+
+    // Extreem zware games -> bij 144 FPS meteen high-end, anders Ignite (want jij wilt niet te agressief opschalen)
+    if (maxW >= 4) {
+      return (fps >= 144) ? products.highend : products.ignite;
+    }
+
+    // Zwaar (Warzone/RDR2) -> voor 60/100: Ignite; voor 144: high-end
+    if (maxW === 3) {
+      return (fps >= 144) ? products.highend : products.ignite;
+    }
+
+    // Gemiddeld -> 60: budget, 100/144: ignite
+    if (maxW === 2) {
+      return (fps <= 60) ? products.budget : products.ignite;
+    }
+
+    // Licht -> 60: budget, 100/144: ignite
+    return (fps <= 60) ? products.budget : products.ignite;
+  }
+
+  function categoryLabel(maxW){
+    if (maxW <= 1) return "Licht";
+    if (maxW === 2) return "Gemiddeld";
+    if (maxW === 3) return "Zwaar";
+    return "Extreem zwaar";
+  }
+
+  function render(product, games, fps){
+    const pcNameEl  = document.getElementById("pcName");
+    const pcPriceEl = document.getElementById("pcPrice");
+    const pcLinkEl  = document.getElementById("pcLink");
+    const whyEl     = document.getElementById("whyText");
+    const ul        = document.getElementById("pcFps");
+
+    pcNameEl.textContent  = product.name;
+    pcPriceEl.textContent = product.price;
+    pcLinkEl.href         = product.link;
+    pcLinkEl.textContent  = `Bekijk ${product.name}`;
+
+    const maxW = getMaxWeight(games);
+    const top2 = getTwoHeaviestGames(games);
+    const cat  = categoryLabel(maxW);
+
+    const g1 = top2[0] || "—";
+    const g2 = top2[1] || "—";
+
+    let uitleg = "";
+    if (product === products.budget) {
+      uitleg = `Omdat je games hebt geselecteerd zoals "${g1}" en "${g2}" en je ${fps}+ FPS voldoende vindt, adviseren we dit budgetmodel voor betaalbaar 1080p gamen.`;
+    } else if (product === products.ignite) {
+      uitleg = `Omdat je games hebt geselecteerd zoals "${g1}" en "${g2}", adviseren we 🔥The Ignite🔥 om rond de ${fps}+ FPS te kunnen halen op 1080p (settings afhankelijk).`;
+    } else {
+      uitleg = `Omdat je (zwaardere) games hebt geselecteerd zoals "${g1}" en "${g2}" én je ${fps}+ FPS wilt, adviseren we High-End voor maximale performance op 1080p.`;
+    }
+
+    // Kort en duidelijk: alleen 2 zwaarste games + categorie
+    whyEl.textContent = `${uitleg} Categorie: ${cat}.`;
+
+    ul.innerHTML = "";
+    product.fps.forEach(f=>{
+      const li=document.createElement("li");
+      li.textContent=f;
+      ul.appendChild(li);
+    });
+
+    document.getElementById("emptyState").style.display="none";
+    document.getElementById("result").style.display="block";
+  }
+
+  function hideResultWithMessage(msg){
+    const empty = document.getElementById("emptyState");
+    empty.innerHTML = msg;
     document.getElementById("result").style.display="none";
-    document.getElementById("emptyState").style.display="block";
-    return;
+    empty.style.display="block";
   }
-  const fps=getMinFps();
-  render(chooseProduct(games,fps),games,fps);
-}
 
-document.getElementById("gameList").addEventListener("change",update);
-document.getElementById("fpsPick").addEventListener("change",update);
+  function update(){
+    const games = getCheckedGames();
+    const fps   = getMinFps();
 
-// init (als iemand al iets aangevinkt heeft door browser cache)
-update();
+    if (games.length === 0) {
+      hideResultWithMessage('Selecteer <b>minimaal 2 games</b> en kies je minimale FPS om advies te krijgen.');
+      return;
+    }
+    if (games.length === 1) {
+      hideResultWithMessage('Selecteer nog <b>1 extra game</b> (minimaal 2) om een betrouwbaar advies te geven.');
+      return;
+    }
+
+    const product = chooseProduct(games, fps);
+    render(product, games, fps);
+  }
+
+  document.getElementById("gameList").addEventListener("change", update);
+  document.getElementById("fpsPick").addEventListener("change", update);
+
+  // init (voor cached checkboxes)
+  update();
 
 });
 </script>
