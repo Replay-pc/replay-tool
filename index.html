@@ -21,6 +21,8 @@
 .rpc-fps-pick{display:grid;gap:8px;margin-top:10px}
 .rpc-radio{display:flex;gap:10px;align-items:center;font-size:14px}
 
+.rpc-divider{height:1px;background:rgba(255,255,255,.12);margin:14px 0}
+
 .rpc-result{margin-top:10px;padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#121826}
 .rpc-badge{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(255,59,59,.18);color:#ff8b8b;font-weight:900;font-size:12px;margin-bottom:10px}
 .rpc-title{margin:6px 0;font-size:20px}
@@ -29,12 +31,29 @@
 .rpc-specs{margin:8px 0 0 18px;line-height:1.5}
 .rpc-actions{margin-top:14px}
 .rpc-link{display:block;text-align:center;padding:12px;border-radius:12px;background:#2b3344;color:#fff;text-decoration:none;font-weight:900}
-.rpc-why{margin-top:10px;padding:10px;border-radius:10px;background:rgba(255,255,255,.05);font-size:13px;line-height:1.45}
+.rpc-why{margin-top:10px;padding:12px;border-radius:12px;background:rgba(255,255,255,.05);font-size:13px;line-height:1.45}
 .rpc-tip{margin-top:16px;font-size:13px;opacity:.9}
 .rpc-tip a{color:#ff8b8b;font-weight:700}
 
 .rpc-empty{padding:14px;border-radius:12px;border:1px dashed rgba(255,255,255,.18);background:rgba(255,255,255,.02)}
 .rpc-empty b{color:#fff}
+
+/* ✅ Fade animation for nicer transitions */
+.rpc-fade{transition:opacity 220ms ease, transform 220ms ease;}
+.rpc-fade.is-out{opacity:0;transform:translateY(6px);pointer-events:none;}
+.rpc-fade.is-in{opacity:1;transform:translateY(0);}
+
+/* ✅ Pro bullets */
+.rpc-bullets{margin:0;padding-left:18px}
+.rpc-bullets li{margin:6px 0}
+
+/* ✅ Confidence tags */
+.rpc-confidence{display:inline-flex;gap:8px;align-items:center;margin-top:10px;font-size:12px;font-weight:900}
+.rpc-pill{display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04)}
+.rpc-pill.ok{border-color:rgba(81, 255, 160, .35)}
+.rpc-pill.maybe{border-color:rgba(255, 193, 59, .35)}
+.rpc-pill.strong{border-color:rgba(255, 59, 59, .35)}
+.rpc-note{margin-top:10px;opacity:.92;font-size:12.5px;line-height:1.45}
 
 @media (max-width:900px){
   .rpc-grid{grid-template-columns:1fr}
@@ -75,11 +94,20 @@
         <label class="rpc-check"><input type="checkbox" value="Cyberpunk 2077"> Cyberpunk 2077</label>
       </div>
 
-      <h3 style="margin-top:18px;">2) Minimale FPS</h3>
+      <div class="rpc-divider"></div>
+
+      <h3>2) Minimale FPS</h3>
       <div class="rpc-fps-pick" id="fpsPick">
         <label class="rpc-radio"><input type="radio" name="minFps" value="60" checked> 60+ FPS</label>
         <label class="rpc-radio"><input type="radio" name="minFps" value="100"> 100+ FPS</label>
         <label class="rpc-radio"><input type="radio" name="minFps" value="144"> 144+ FPS</label>
+      </div>
+
+      <h3 style="margin-top:18px;">3) Wat is belangrijker?</h3>
+      <p class="rpc-help">Dit beïnvloedt hoe streng we adviseren bij dezelfde games.</p>
+      <div class="rpc-fps-pick" id="stylePick">
+        <label class="rpc-radio"><input type="radio" name="playStyle" value="competitive" checked> Competitief (hoge FPS, lagere settings)</label>
+        <label class="rpc-radio"><input type="radio" name="playStyle" value="graphics"> Mooie graphics (hogere settings)</label>
       </div>
     </div>
 
@@ -87,13 +115,19 @@
     <div class="rpc-card">
       <h3>Jouw advies</h3>
 
-      <div class="rpc-result" id="result" style="display:none;">
+      <div class="rpc-result rpc-fade is-in" id="result" style="display:none;">
         <div class="rpc-badge">Aanbevolen systeem</div>
 
         <h4 class="rpc-title" id="pcName"></h4>
         <div class="rpc-price" id="pcPrice"></div>
 
-        <div class="rpc-why" id="whyText"></div>
+        <div class="rpc-why">
+          <ul class="rpc-bullets" id="whyBullets"></ul>
+          <div class="rpc-confidence" id="confidenceRow" style="display:none;">
+            <span class="rpc-pill" id="confidencePill">—</span>
+          </div>
+          <div class="rpc-note" id="nuanceNote" style="display:none;"></div>
+        </div>
 
         <h5 class="rpc-h5">🎯 Verwachte prestaties (1080p)</h5>
         <ul class="rpc-specs" id="pcFps"></ul>
@@ -121,25 +155,20 @@
 document.addEventListener("DOMContentLoaded",()=>{
 
   // 1 = licht, 2 = gemiddeld, 3 = zwaar, 4 = extreem zwaar
-  // (Deze verdeling voorkomt te snelle upsell: Apex/GTA/Fortnite blijven “gemiddeld”.)
   const gameWeights = {
-    // Licht
     "Roblox": 1,
     "Minecraft": 1,
     "League of Legends": 1,
     "Rocket League": 1,
 
-    // Gemiddeld
     "Fortnite": 2,
     "Valorant": 2,
     "GTA V": 2,
     "Apex Legends": 2,
 
-    // Zwaar
     "Call of Duty / Warzone": 3,
     "Red Dead Redemption 2": 3,
 
-    // Extreem zwaar
     "Hogwarts Legacy": 4,
     "Cyberpunk 2077": 4
   };
@@ -186,6 +215,18 @@ document.addEventListener("DOMContentLoaded",()=>{
     }
   };
 
+  // DOM refs
+  const resultBox   = document.getElementById("result");
+  const emptyState  = document.getElementById("emptyState");
+  const pcNameEl    = document.getElementById("pcName");
+  const pcPriceEl   = document.getElementById("pcPrice");
+  const pcLinkEl    = document.getElementById("pcLink");
+  const pcFpsUl     = document.getElementById("pcFps");
+  const whyBullets  = document.getElementById("whyBullets");
+  const confidenceRow = document.getElementById("confidenceRow");
+  const confidencePill = document.getElementById("confidencePill");
+  const nuanceNote  = document.getElementById("nuanceNote");
+
   function getCheckedGames(){
     return [...document.querySelectorAll('#gameList input:checked')].map(i=>i.value);
   }
@@ -194,13 +235,17 @@ document.addEventListener("DOMContentLoaded",()=>{
     return parseInt(document.querySelector('input[name="minFps"]:checked').value, 10);
   }
 
+  function getPlayStyle(){
+    return document.querySelector('input[name="playStyle"]:checked').value;
+  }
+
   function getMaxWeight(games){
     let max=0;
     games.forEach(g=>max=Math.max(max, gameWeights[g] || 0));
     return max;
   }
 
-  // Pak de 2 zwaarste games (op basis van weight). Bij gelijke weight: volgorde selectie.
+  // 2 zwaarste games (bij gelijke weight: volgorde selectie)
   function getTwoHeaviestGames(games){
     const ranked = games
       .map((g, idx) => ({ g, w: gameWeights[g] || 0, idx }))
@@ -215,30 +260,6 @@ document.addEventListener("DOMContentLoaded",()=>{
     return unique;
   }
 
-  // GAME-gedreven logica (met minimale FPS als voorkeur)
-  // Doel: NIET te snel opschalen, maar wel opschalen als het “echt moet”.
-  function chooseProduct(games, fps){
-    const maxW = getMaxWeight(games);
-
-    // Extreem zware games -> bij 144 FPS meteen high-end, anders Ignite (want jij wilt niet te agressief opschalen)
-    if (maxW >= 4) {
-      return (fps >= 144) ? products.highend : products.ignite;
-    }
-
-    // Zwaar (Warzone/RDR2) -> voor 60/100: Ignite; voor 144: high-end
-    if (maxW === 3) {
-      return (fps >= 144) ? products.highend : products.ignite;
-    }
-
-    // Gemiddeld -> 60: budget, 100/144: ignite
-    if (maxW === 2) {
-      return (fps <= 60) ? products.budget : products.ignite;
-    }
-
-    // Licht -> 60: budget, 100/144: ignite
-    return (fps <= 60) ? products.budget : products.ignite;
-  }
-
   function categoryLabel(maxW){
     if (maxW <= 1) return "Licht";
     if (maxW === 2) return "Gemiddeld";
@@ -246,58 +267,145 @@ document.addEventListener("DOMContentLoaded",()=>{
     return "Extreem zwaar";
   }
 
-  function render(product, games, fps){
-    const pcNameEl  = document.getElementById("pcName");
-    const pcPriceEl = document.getElementById("pcPrice");
-    const pcLinkEl  = document.getElementById("pcLink");
-    const whyEl     = document.getElementById("whyText");
-    const ul        = document.getElementById("pcFps");
+  // ✅ UPDATED: speelstijl + FPS hebben altijd merkbaar effect
+  function chooseProduct(games, fps, style){
+    const maxW = getMaxWeight(games);
+
+    // competitive: minder streng (-0.5)
+    // graphics: strenger (+0.75)
+    const styleModifier = (style === "graphics") ? 0.75 : -0.5;
+
+    // fps doel: 60 relaxed, 100 licht strenger, 144 strenger
+    const fpsModifier = (fps >= 144) ? 0.75 : (fps >= 100) ? 0.25 : 0;
+
+    const effective = maxW + styleModifier + fpsModifier;
+
+    // Drempels (tweakbaar)
+    if (effective <= 1.25) return products.budget;
+    if (effective <= 3.25) return products.ignite;
+    return products.highend;
+  }
+
+  // ✅ Confidence + nuance (professional “eerlijkheid”)
+  function getConfidence(product, maxW, fps, style){
+    if (product === products.highend) return { level:"strong", text:"Zeker advies" };
+
+    // Twijfelzone: dicht bij grens naar hogere tier
+    // We nemen bewust "effective" mee zodat de tool consequent is.
+    const styleModifier = (style === "graphics") ? 0.75 : -0.5;
+    const fpsModifier = (fps >= 144) ? 0.75 : (fps >= 100) ? 0.25 : 0;
+    const effective = maxW + styleModifier + fpsModifier;
+
+    // Binnen 0.35 van de grens? -> twijfelzone
+    // Grens budget->ignite: 1.25 | ignite->highend: 3.25
+    const nearBudget = Math.abs(effective - 1.25) <= 0.35;
+    const nearHigh   = Math.abs(effective - 3.25) <= 0.35;
+
+    if (nearBudget || nearHigh) return { level:"maybe", text:"Twijfelzone" };
+    return { level:"ok", text:"Goede match" };
+  }
+
+  function setPill(conf){
+    confidencePill.className = "rpc-pill " + (conf.level === "strong" ? "strong" : conf.level === "maybe" ? "maybe" : "ok");
+    confidencePill.textContent = conf.text;
+    confidenceRow.style.display = "inline-flex";
+  }
+
+  function setNuanceNote(conf, product, maxW, fps, style){
+    nuanceNote.style.display = "none";
+    nuanceNote.textContent = "";
+
+    if (conf.level !== "maybe") return;
+
+    let note = "";
+    if (product === products.ignite && (maxW >= 3) && style === "graphics" && fps >= 100){
+      note = "Tip: met ‘Mooie graphics’ vragen games meer van je GPU. Wil je écht stabiel 100+ FPS op hoge settings, dan is High-End vaak de veiligere keuze.";
+    } else if (product === products.budget && maxW >= 2){
+      note = "Tip: budgetadvies is bedoeld voor 60+ FPS. In Fortnite/Apex kan FPS per map/setting verschillen. Voor meer marge is Ignite een veilige upgrade.";
+    } else {
+      note = "Tip: performance kan variëren door settings, maps, servers en updates. Voor zekerheid kun je ons contactformulier gebruiken.";
+    }
+
+    nuanceNote.textContent = note;
+    nuanceNote.style.display = "block";
+  }
+
+  // ✅ Smooth fade swap
+  function fadeSwap(updateFn){
+    if (resultBox.style.display === "none"){
+      updateFn();
+      resultBox.classList.remove("is-out");
+      resultBox.classList.add("is-in");
+      return;
+    }
+
+    resultBox.classList.remove("is-in");
+    resultBox.classList.add("is-out");
+
+    setTimeout(() => {
+      updateFn();
+      requestAnimationFrame(() => {
+        resultBox.classList.remove("is-out");
+        resultBox.classList.add("is-in");
+      });
+    }, 220);
+  }
+
+  function render(product, games, fps, style){
+    const maxW = getMaxWeight(games);
+    const cat  = categoryLabel(maxW);
+    const top2 = getTwoHeaviestGames(games);
+    const g1 = top2[0] || "—";
+    const g2 = top2[1] || "—";
 
     pcNameEl.textContent  = product.name;
     pcPriceEl.textContent = product.price;
     pcLinkEl.href         = product.link;
     pcLinkEl.textContent  = `Bekijk ${product.name}`;
 
-    const maxW = getMaxWeight(games);
-    const top2 = getTwoHeaviestGames(games);
-    const cat  = categoryLabel(maxW);
-
-    const g1 = top2[0] || "—";
-    const g2 = top2[1] || "—";
-
-    let uitleg = "";
-    if (product === products.budget) {
-      uitleg = `Omdat je games hebt geselecteerd zoals "${g1}" en "${g2}" en je ${fps}+ FPS voldoende vindt, adviseren we dit budgetmodel voor betaalbaar 1080p gamen.`;
-    } else if (product === products.ignite) {
-      uitleg = `Omdat je games hebt geselecteerd zoals "${g1}" en "${g2}", adviseren we 🔥The Ignite🔥 om rond de ${fps}+ FPS te kunnen halen op 1080p (settings afhankelijk).`;
-    } else {
-      uitleg = `Omdat je (zwaardere) games hebt geselecteerd zoals "${g1}" en "${g2}" én je ${fps}+ FPS wilt, adviseren we High-End voor maximale performance op 1080p.`;
-    }
-
-    // Kort en duidelijk: alleen 2 zwaarste games + categorie
-    whyEl.textContent = `${uitleg} Categorie: ${cat}.`;
-
-    ul.innerHTML = "";
-    product.fps.forEach(f=>{
+    // ✅ 3 bullets
+    whyBullets.innerHTML = "";
+    const bullets = [
+      `Zwaarste games in jouw selectie: “${g1}” en “${g2}”.`,
+      `Jouw doel: ${fps}+ FPS op 1080p.`,
+      `Speelstijl: ${style === "competitive" ? "Competitief (hoge FPS, lagere settings)" : "Mooie graphics (hogere settings)"} — dit maakt het advies ${style === "competitive" ? "minder streng" : "strenger"}.`
+    ];
+    bullets.forEach(t=>{
       const li=document.createElement("li");
-      li.textContent=f;
-      ul.appendChild(li);
+      li.textContent=t;
+      whyBullets.appendChild(li);
     });
 
-    document.getElementById("emptyState").style.display="none";
-    document.getElementById("result").style.display="block";
+    const conf = getConfidence(product, maxW, fps, style);
+    setPill(conf);
+    setNuanceNote(conf, product, maxW, fps, style);
+
+    if (conf.level !== "maybe"){
+      nuanceNote.textContent = `Categorie van je zwaarste game: ${cat}.`;
+      nuanceNote.style.display = "block";
+    }
+
+    pcFpsUl.innerHTML = "";
+    product.fps.forEach(line=>{
+      const li=document.createElement("li");
+      li.textContent=line;
+      pcFpsUl.appendChild(li);
+    });
+
+    emptyState.style.display="none";
+    resultBox.style.display="block";
   }
 
   function hideResultWithMessage(msg){
-    const empty = document.getElementById("emptyState");
-    empty.innerHTML = msg;
-    document.getElementById("result").style.display="none";
-    empty.style.display="block";
+    emptyState.innerHTML = msg;
+    resultBox.style.display="none";
+    emptyState.style.display="block";
   }
 
   function update(){
     const games = getCheckedGames();
     const fps   = getMinFps();
+    const style = getPlayStyle();
 
     if (games.length === 0) {
       hideResultWithMessage('Selecteer <b>minimaal 2 games</b> en kies je minimale FPS om advies te krijgen.');
@@ -308,14 +416,17 @@ document.addEventListener("DOMContentLoaded",()=>{
       return;
     }
 
-    const product = chooseProduct(games, fps);
-    render(product, games, fps);
+    const chosen = chooseProduct(games, fps, style);
+
+    fadeSwap(() => {
+      render(chosen, games, fps, style);
+    });
   }
 
   document.getElementById("gameList").addEventListener("change", update);
   document.getElementById("fpsPick").addEventListener("change", update);
+  document.getElementById("stylePick").addEventListener("change", update);
 
-  // init (voor cached checkboxes)
   update();
 
 });
