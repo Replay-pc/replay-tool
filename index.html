@@ -29,7 +29,7 @@
 .rpc-specs{margin:8px 0 0 18px;line-height:1.5}
 .rpc-actions{margin-top:14px}
 .rpc-link{display:block;text-align:center;padding:12px;border-radius:12px;background:#2b3344;color:#fff;text-decoration:none;font-weight:900}
-.rpc-why{margin-top:10px;padding:10px;border-radius:10px;background:rgba(255,255,255,.05);font-size:13px}
+.rpc-why{margin-top:10px;padding:10px;border-radius:10px;background:rgba(255,255,255,.05);font-size:13px;line-height:1.45}
 .rpc-tip{margin-top:16px;font-size:13px;opacity:.9}
 .rpc-tip a{color:#ff8b8b;font-weight:700}
 
@@ -99,10 +99,8 @@
 </div>
 
 <p class="rpc-tip">
-💡 Twijfel je? Gebruik ons 
-<a href="https://replay-pc.eu/contactformulier" target="_blank">
-contactformulier
-</a> 
+💡 Twijfel je? Gebruik ons
+<a href="https://replay-pc.eu/contactformulier" target="_blank">contactformulier</a>
 voor een persoonlijk advies op maat.
 </p>
 </div>
@@ -130,9 +128,11 @@ budget:{
 name:"💸 Budget 60FPS",
 price:"€—",
 link:"#",
-fps:["Esports games: 120–200 FPS",
-"Warzone: 60–90 FPS",
-"RDR2: 55–75 FPS"]
+fps:[
+  "Esports games: 120–200 FPS",
+  "Warzone: 60–90 FPS",
+  "RDR2: 55–75 FPS"
+]
 },
 ignite:{
 name:"🔥The Ignite🔥",
@@ -154,77 +154,115 @@ highend:{
 name:"👑 High-End",
 price:"€—",
 link:"#",
-fps:["Esports: 240+ FPS",
-"Warzone: 140–190 FPS",
-"RDR2: 120–160 FPS",
-"Cyberpunk: 105–150 FPS"]
+fps:[
+  "Esports: 240+ FPS",
+  "Warzone: 140–190 FPS",
+  "RDR2: 120–160 FPS",
+  "Cyberpunk: 105–150 FPS"
+]
 }
 };
 
 function getCheckedGames(){
-return [...document.querySelectorAll('#gameList input:checked')].map(i=>i.value);
+  return [...document.querySelectorAll('#gameList input:checked')].map(i=>i.value);
 }
 
 function getMinFps(){
-return parseInt(document.querySelector('input[name="minFps"]:checked').value);
+  return parseInt(document.querySelector('input[name="minFps"]:checked').value, 10);
 }
 
 function getMaxWeight(games){
-let max=0;
-games.forEach(g=>max=Math.max(max,gameWeights[g]||0));
-return max;
+  let max=0;
+  games.forEach(g=>max=Math.max(max,gameWeights[g]||0));
+  return max;
+}
+
+function getHeaviestGame(games){
+  if(!games.length) return null;
+  let best=games[0];
+  let bestW=gameWeights[best]||0;
+  games.forEach(g=>{
+    const w=gameWeights[g]||0;
+    if(w>bestW){ best=g; bestW=w; }
+  });
+  return best;
 }
 
 function chooseProduct(games,fps){
-const weight=getMaxWeight(games);
+  const weight=getMaxWeight(games);
 
-if(weight===1){
-if(fps===60) return products.budget;
-return products.ignite;
-}
-if(weight===2){
-if(fps>=144) return products.highend;
-return products.ignite;
-}
-if(weight===3){
-if(fps>=144) return products.highend;
-return products.ignite;
-}
+  if(weight===1){
+    if(fps===60) return products.budget;
+    return products.ignite;
+  }
+  if(weight===2){
+    if(fps>=144) return products.highend;
+    return products.ignite;
+  }
+  if(weight===3){
+    if(fps>=144) return products.highend;
+    return products.ignite;
+  }
+  return products.ignite;
 }
 
 function render(product,games,fps){
-document.getElementById("pcName").textContent=product.name;
-document.getElementById("pcPrice").textContent=product.price;
-document.getElementById("pcLink").href=product.link;
+  document.getElementById("pcName").textContent=product.name;
+  document.getElementById("pcPrice").textContent=product.price;
+  document.getElementById("pcLink").href=product.link;
+  document.getElementById("pcLink").textContent=`Bekijk ${product.name}`;
 
-const why=`Zwaarste categorie: ${getMaxWeight(games)} | Minimale FPS: ${fps}+`;
-document.getElementById("whyText").textContent=why;
+  const weight=getMaxWeight(games);
+  const zwaarsteGame=getHeaviestGame(games);
 
-const ul=document.getElementById("pcFps");
-ul.innerHTML="";
-product.fps.forEach(f=>{
-const li=document.createElement("li");
-li.textContent=f;
-ul.appendChild(li);
-});
+  let categorie="Licht";
+  if(weight===2) categorie="Zwaarder";
+  if(weight===3) categorie="Zwaar";
 
-document.getElementById("emptyState").style.display="none";
-document.getElementById("result").style.display="block";
+  let reden="";
+  if(product===products.budget){
+    reden=`Omdat je vooral lichte games hebt gekozen en 60+ FPS voldoende vindt, adviseren we dit budgetmodel.`;
+  } else if(product===products.ignite){
+    if(weight===1){
+      reden=`Omdat je ${fps}+ FPS wilt (voor extra soepele gameplay) adviseren we 🔥The Ignite🔥.`;
+    } else {
+      reden=`Omdat je zwaardere games hebt gekozen (zwaarste: ${zwaarsteGame}) en je ${fps}+ FPS wilt, adviseren we 🔥The Ignite🔥 voor stabielere prestaties.`;
+    }
+  } else if(product===products.highend){
+    reden=`Omdat je ${fps}+ FPS wilt én je selectie zwaardere games bevat (zwaarste: ${zwaarsteGame}), adviseren we High-End voor maximale performance.`;
+  }
+
+  const extra=`Je selectie: ${games.join(", ")}. Categorie: ${categorie}.`;
+  document.getElementById("whyText").textContent=`${reden} ${extra}`;
+
+  const ul=document.getElementById("pcFps");
+  ul.innerHTML="";
+  product.fps.forEach(f=>{
+    const li=document.createElement("li");
+    li.textContent=f;
+    ul.appendChild(li);
+  });
+
+  document.getElementById("emptyState").style.display="none";
+  document.getElementById("result").style.display="block";
 }
 
 function update(){
-const games=getCheckedGames();
-if(!games.length){
-document.getElementById("result").style.display="none";
-document.getElementById("emptyState").style.display="block";
-return;
-}
-const fps=getMinFps();
-render(chooseProduct(games,fps),games,fps);
+  const games=getCheckedGames();
+  if(!games.length){
+    document.getElementById("result").style.display="none";
+    document.getElementById("emptyState").style.display="block";
+    return;
+  }
+  const fps=getMinFps();
+  render(chooseProduct(games,fps),games,fps);
 }
 
 document.getElementById("gameList").addEventListener("change",update);
 document.getElementById("fpsPick").addEventListener("change",update);
+
+// init (als iemand al iets aangevinkt heeft door browser cache)
+update();
 
 });
 </script>
