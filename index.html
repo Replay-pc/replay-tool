@@ -165,10 +165,10 @@
   <script>
   document.addEventListener("DOMContentLoaded", () => {
 
-    // Categorie-weights:
-    // 1 = LOW (Ignite meestal prima)
-    // 2 = MID (Warzone/RDR2)
-    // 3 = HEAVY (Hogwarts/Cyberpunk)
+    // Categorieën op basis van "hoe snel adviseren we een stap hoger"
+    // 1 = LOW  (esports/lichte games)
+    // 2 = MID  (Warzone/RDR2 -> vanaf hier adviseren we minimaal Ignite (Medium))
+    // 3 = HEAVY (Hogwarts/Cyberpunk -> vaak beter minimaal Ignite (Medium), 144+ -> High-end)
     const gameWeights = {
       // LOW
       "Roblox": 1,
@@ -180,7 +180,7 @@
       "Apex Legends": 1,
       "GTA V / FiveM (Roleplay)": 1,
 
-      // MID
+      // MID (vanaf hier: Medium/ignite sneller aanraden)
       "Call of Duty / Warzone": 2,
       "Red Dead Redemption 2": 2,
 
@@ -189,22 +189,37 @@
       "Cyberpunk 2077": 3
     };
 
-    const weightLabel = {
-      1: "LOW",
-      2: "MID",
-      3: "HEAVY"
-    };
-
+    const weightLabel = { 1: "LOW", 2: "MID", 3: "HEAVY" };
     const fpsLabel = {
       60: "60+ FPS (soepel)",
       100: "100+ FPS (competitief)",
       144: "144+ FPS (max performance)"
     };
 
-    // ✅ 3 PC’s (pas later alleen prijs + link aan)
+    // ✅ Assortiment: Budget (60 FPS), Ignite = Medium, High-end
+    // Vul later alleen links/prijzen in.
     const products = {
+      budget: {
+        name: "💸Budget 60FPS💸",
+        price: "€—", // <-- VUL IN
+        link: "https://replay-pc.eu/PLAK-HIER-LINK", // <-- VUL IN
+        fps: [
+          "Roblox / Minecraft: 120–200+ FPS",
+          "League of Legends / Rocket League: 140–200+ FPS",
+          "Valorant / CS2: 140–200+ FPS",
+          "Fortnite (Performance Mode): 120–180 FPS",
+          "Apex Legends: 90–130 FPS",
+          "GTA V / FiveM: 80–120 FPS",
+          "Call of Duty / Warzone: ± 60–90 FPS (settings afhankelijk)",
+          "Red Dead Redemption 2: ± 55–75 FPS (mix settings)"
+        ],
+        context60: "Dit is de slimste keuze als je vooral 60+ FPS wilt halen zonder onnodige kosten.",
+        context100: "Voor 100+ FPS in zwaardere games adviseren we meestal een stap hoger.",
+        context144: "Voor 144+ FPS adviseren we een stap hoger (vooral als je een 144Hz monitor hebt)."
+      },
+
       ignite: {
-        name: "🔥The Ignite🔥",
+        name: "🔥The Ignite🔥 (Medium)",
         price: "€650,-",
         link: "https://replay-pc.eu/goedkope-gaming-pc-rtx-3060-ti",
         fps: [
@@ -219,49 +234,29 @@
           "Hogwarts Legacy (High): 75–95 FPS",
           "Cyberpunk 2077 (High, zonder ray tracing): 70–90 FPS"
         ],
-        context60: 'Tip: Zware AAA-games speel je op "Low/Medium" voor een soepele ervaring.',
-        context100: "Tip: Voor 100+ FPS in zware games zijn settings belangrijk (competitive settings).",
-        context144: "Tip: 144+ FPS is vooral haalbaar in esports-games; AAA blijft lager afhankelijk van settings."
+        context60: "Veilige allround keuze voor soepel 1080p gamen met veel marge.",
+        context100: "Gericht op stabiel hoge FPS in populaire games (en nog steeds sterk in AAA).",
+        context144: "144+ FPS haalbaar in esports-titels; AAA blijft lager afhankelijk van settings."
       },
-      medium: {
-        name: "⚡The Medium⚡",
-        price: "€—",
-        link: "https://replay-pc.eu/PLAK-HIER-LINK",
-        fps: [
-          "Roblox / Minecraft: 200+ FPS",
-          "League of Legends / Rocket League: 200+ FPS",
-          "Fortnite (Performance Mode): 200+ FPS",
-          "Fortnite (High Settings): 140–180 FPS",
-          "GTA V (High): 140–170 FPS",
-          "Apex Legends: 130–170 FPS",
-          "Call of Duty / Warzone: 110–140 FPS",
-          "Red Dead Redemption 2 (High): 95–120 FPS",
-          "Hogwarts Legacy (High): 85–110 FPS",
-          "Cyberpunk 2077 (High, zonder ray tracing): 80–105 FPS"
-        ],
-        context60: "Tip: Dit is de veilige keuze voor zware AAA-games met stabiele 60+ FPS.",
-        context100: "Tip: Gericht op stabiel hogere FPS in zwaardere games (1080p).",
-        context144: "Tip: Voor 144+ FPS in veel titels (vooral esports) met extra marge."
-      },
+
       highend: {
         name: "👑High-End👑",
-        price: "€—",
-        link: "https://replay-pc.eu/PLAK-HIER-LINK",
+        price: "€—", // <-- VUL IN
+        link: "https://replay-pc.eu/PLAK-HIER-LINK", // <-- VUL IN
         fps: [
           "Roblox / Minecraft: 240+ FPS",
           "League of Legends / Rocket League: 240+ FPS",
+          "Valorant / CS2: 240+ FPS",
           "Fortnite (Performance Mode): 240+ FPS",
-          "Fortnite (High Settings): 170–220 FPS",
-          "GTA V (High): 170–220 FPS",
           "Apex Legends: 160–220 FPS",
           "Call of Duty / Warzone: 140–190 FPS",
           "Red Dead Redemption 2 (High): 120–160 FPS",
           "Hogwarts Legacy (High): 110–150 FPS",
           "Cyberpunk 2077 (High, zonder ray tracing): 105–150 FPS"
         ],
-        context60: "Tip: Overkill voor 60 FPS, maar wel maximale zekerheid en levensduur.",
-        context100: "Tip: Ruim voldoende marge voor zware games met hoge FPS.",
-        context144: "Tip: Beste keuze als je echt maximale performance wilt (ook voor toekomstige games)."
+        context60: "Overkill voor 60 FPS, maar wel maximale zekerheid en levensduur.",
+        context100: "Ruim voldoende marge voor zware games met hoge FPS.",
+        context144: "Beste keuze als je echt maximale performance wilt (ook voor toekomstige games)."
       }
     };
 
@@ -315,25 +310,28 @@
       return best;
     }
 
-    // ✅ FPS-keuze + zwaarste game => product (B: heavy+60 => medium)
+    // ✅ Nieuwe beslislogica met Budget model:
+    // - LOW + 60 FPS  => Budget
+    // - LOW + 100/144 => Ignite (Medium) (geen snelle upsell)
+    // - MID (Warzone/RDR2) => minimaal Ignite (Medium) (zoals jij wilde)
+    // - HEAVY (Hogwarts/Cyberpunk) => Ignite, maar bij 144 => High-end
     function chooseProduct(selectedGames, minFps){
-      const maxWeight = getMaxWeight(selectedGames);
-      // 1=LOW, 2=MID, 3=HEAVY
+      const maxWeight = getMaxWeight(selectedGames); // 1=LOW 2=MID 3=HEAVY
 
-      if (maxWeight === 3) {
-        if (minFps >= 144) return products.highend;
-        return products.medium; // 60 of 100 -> medium
+      if (maxWeight === 1) {
+        if (minFps <= 60) return products.budget;
+        return products.ignite; // 100/144
       }
 
       if (maxWeight === 2) {
-        if (minFps >= 144) return products.highend;
-        if (minFps >= 100) return products.medium;
-        return products.ignite;
+        // Vanaf COD/RDR: minimaal Medium (Ignite)
+        if (minFps >= 144) return products.highend; // voor echte max performance
+        return products.ignite; // 60 of 100
       }
 
-      // LOW
-      if (minFps >= 144) return products.medium;
-      return products.ignite;
+      // HEAVY
+      if (minFps >= 144) return products.highend;
+      return products.ignite; // 60 of 100 -> veilige keuze
     }
 
     function buildWhyText(selectedGames, minFps){
@@ -341,23 +339,23 @@
       const maxW = getMaxWeight(selectedGames);
       const cat = weightLabel[maxW] || "—";
       const fpsT = fpsLabel[minFps] || `${minFps}+ FPS`;
-
-      // Transparant, kort, duidelijk
       return `Zwaarste game: "${heaviest}". Categorie: ${cat}. Jouw keuze: ${fpsT}.`;
     }
 
     function buildContextText(product, minFps, selectedGames){
       const maxW = getMaxWeight(selectedGames);
 
-      // Extra transparantie bij heavy games
-      if (maxW === 3 && minFps === 60) {
-        return 'Omdat je een zware AAA-game selecteerde, adviseren we Medium als veilige keuze voor stabielere 60+ FPS (minder dips).';
+      // Extra transparantie rond opschalen
+      if (maxW === 1 && minFps === 60) {
+        return "Omdat je vooral lichte games selecteerde én 60+ FPS voldoende vindt, adviseren we ons budgetmodel.";
       }
-      if (maxW === 2 && minFps === 60) {
-        return 'Je hebt een zwaardere game geselecteerd, maar 60+ FPS is vaak haalbaar op Ignite met de juiste settings.';
+      if (maxW >= 2 && product === products.ignite) {
+        return "Omdat je een zwaardere game selecteerde (zoals Warzone/RDR2 of zwaarder), adviseren we minimaal The Ignite (Medium) voor stabielere prestaties.";
+      }
+      if (product === products.highend && minFps >= 144) {
+        return "Je kiest voor 144+ FPS. Voor maximale performance (zeker in zware games) adviseren we High-End.";
       }
 
-      // Algemene context per product + fps
       if (minFps === 60) return product.context60 || "";
       if (minFps === 100) return product.context100 || "";
       return product.context144 || "";
@@ -373,7 +371,7 @@
       rpcContext.textContent = buildContextText(product, minFps, selectedGames);
 
       pcFps.innerHTML = "";
-      product.fps.forEach(line => {
+      (product.fps || []).forEach(line => {
         const li = document.createElement("li");
         li.textContent = line;
         pcFps.appendChild(li);
@@ -382,9 +380,9 @@
       emptyState.style.display = "none";
       result.style.display = "block";
 
-      // Tip tonen bij medium/highend of zodra de selectie mid/heavy bevat of 144 gekozen
+      // Tip tonen zodra er opschaling/keuzestress kan zijn
       const maxW = getMaxWeight(selectedGames);
-      const showTip = (product === products.medium || product === products.highend || maxW >= 2 || minFps >= 144);
+      const showTip = (maxW >= 2 || minFps >= 144);
       if (rpcTip) rpcTip.style.display = showTip ? "block" : "none";
     }
 
@@ -394,7 +392,6 @@
       if (rpcTip) rpcTip.style.display = "none";
     }
 
-    // ✅ Automatisch adviseren: bij elke wijziging
     function updateRecommendation(){
       const games = getCheckedGames();
       const minFps = getMinFpsChoice();
@@ -408,16 +405,14 @@
       renderProduct(product, games, minFps);
     }
 
-    // Listeners: games + fps
+    // Auto update
     gameList.addEventListener("change", updateRecommendation);
     fpsPick.addEventListener("change", updateRecommendation);
 
     resetBtn.addEventListener("click", () => {
       document.querySelectorAll('#gameList input[type="checkbox"]').forEach(i => i.checked = false);
-
       const fps60 = document.querySelector('input[name="minFps"][value="60"]');
       if (fps60) fps60.checked = true;
-
       clearResult();
     });
 
