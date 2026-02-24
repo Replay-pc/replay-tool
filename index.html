@@ -403,37 +403,39 @@ document.addEventListener("DOMContentLoaded",()=>{
     - Extreem is NIET automatisch upper; Ignite (mid) is baseline.
     - Alleen opschalen bij hogere FPS en/of graphics-streng.
   */
-  function requiredTier(games, fps, style){
-    const w = getMaxWeight(games);
+function requiredTier(games, fps, style){
 
-    // Baseline tiers
-    // licht -> low
-    // gemiddeld -> low (60) / mid (100/144)
-    // zwaar -> mid
-    // extreem -> mid (Ignite)
-    let req = 0;
-    if (w <= 1) req = 0;          // low
-    else if (w === 2) req = 0;    // start low, fps/style bepaalt omhoog
-    else if (w === 3) req = 1;    // mid
-    else req = 1;                 // extreem -> mid baseline
+  const maxW = getMaxWeight(games);
+  const extremeCount = countWeight(games, 4);
+  const heavyCount = countWeight(games, 3) + extremeCount;
 
-    // FPS invloed
-    if (fps >= 100 && w >= 2) req = Math.max(req, 1); // 100+ bij gemiddeld+ -> minimaal mid
-    if (fps >= 144 && w >= 2) req = Math.max(req, 2); // 144+ bij gemiddeld+ -> vaak upper
+  let req = 0;
 
-    // Zwaar/extreem strenger bij 144+
-    if (fps >= 144 && w >= 3) req = Math.max(req, 2);
+  // 🔹 1) Baseline op zwaarte
+  if (maxW <= 1) req = 0;                // esports → low
+  else if (maxW === 2) req = 1;          // gemiddeld → Ignite
+  else if (maxW === 3) req = 1;          // zwaar → Ignite
+  else req = 1;                          // extreem → Ignite (NIET meteen upper)
 
-    // Graphics is strenger dan competitive
-    if (style === "graphics"){
-      if (fps >= 100 && w >= 3) req = Math.max(req, 2);
-      if (fps >= 144 && w >= 3) req = Math.max(req, 3);
-      if (w >= 4 && fps >= 100) req = Math.max(req, 2);
-      if (w >= 4 && fps >= 144) req = Math.max(req, 3);
-    }
+  // 🔹 2) FPS invloed
+  if (fps >= 100 && maxW >= 2)
+    req = Math.max(req, 1);              // 100+ bij gemiddeld+ → Ignite minimum
 
-    return Math.max(0, Math.min(3, req));
+  if (fps >= 144 && maxW >= 2)
+    req = Math.max(req, 2);              // 144+ bij gemiddeld+ → Upper
+
+  // 🔹 3) Graphics is strenger
+  if (style === "graphics"){
+    if (fps >= 144 && maxW >= 3)
+      req = Math.max(req, 2);            // zwaar + 144 graphics → Upper
+
+    // 🔥 Alleen hier mag 5090 verschijnen
+    if (fps >= 144 && extremeCount >= 2)
+      req = 3;                           // meerdere extreme games + 144 graphics
   }
+
+  return Math.max(0, Math.min(3, req));
+}
 
   /*
     ✅ SCORE (alleen groen/oranje)
