@@ -6,10 +6,19 @@
 <title>Replay PC Tool</title>
 
 <style>
+:root{
+  --bg:#0f1115;
+  --card:#0f1115;
+  --panel:#121826;
+  --stroke:rgba(255,255,255,.12);
+  --muted:rgba(255,255,255,.75);
+  --accent:#ff3b3b;
+}
+
 .rpc-wrap{max-width:1100px;margin:0 auto;padding:18px;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;}
 .rpc-sub{opacity:.9;margin-top:6px}
 .rpc-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;margin-top:14px}
-.rpc-card{border:1px solid rgba(0,0,0,.12);border-radius:14px;padding:16px;background:#0f1115;color:#e9eef5;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.rpc-card{border:1px solid rgba(0,0,0,.12);border-radius:14px;padding:16px;background:var(--card);color:#e9eef5;box-shadow:0 10px 30px rgba(0,0,0,.25)}
 .rpc-card h3{margin:0 0 10px 0}
 .rpc-help{margin:0 0 12px 0;opacity:.85;font-size:14px}
 
@@ -21,56 +30,81 @@
 .rpc-fps-pick{display:grid;gap:8px;margin-top:10px}
 .rpc-radio{display:flex;gap:10px;align-items:center;font-size:14px}
 
-.rpc-divider{height:1px;background:rgba(255,255,255,.12);margin:14px 0}
+.rpc-divider{height:1px;background:var(--stroke);margin:14px 0}
 
-.rpc-result{margin-top:10px;padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#121826}
+.rpc-result{margin-top:10px;padding:14px;border-radius:12px;border:1px solid var(--stroke);background:var(--panel)}
 .rpc-badge{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(255,59,59,.18);color:#ff8b8b;font-weight:900;font-size:12px;margin-bottom:10px}
 .rpc-title{margin:6px 0;font-size:20px}
-.rpc-price{font-size:22px;font-weight:900;margin-bottom:12px;color:#ff3b3b;}
+.rpc-price{font-size:22px;font-weight:900;margin-bottom:12px;color:var(--accent);}
 .rpc-h5{margin:14px 0 8px 0;font-size:14px}
 .rpc-specs{margin:8px 0 0 18px;line-height:1.5}
 .rpc-actions{margin-top:14px}
 .rpc-link{display:block;text-align:center;padding:12px;border-radius:12px;background:#2b3344;color:#fff;text-decoration:none;font-weight:900}
 .rpc-why{margin-top:10px;padding:12px;border-radius:12px;background:rgba(255,255,255,.05);font-size:13px;line-height:1.45}
+
 .rpc-tip{margin-top:16px;font-size:13px;opacity:.9}
 .rpc-tip a{color:#ff8b8b;font-weight:700}
 
 .rpc-empty{padding:14px;border-radius:12px;border:1px dashed rgba(255,255,255,.18);background:rgba(255,255,255,.02)}
 .rpc-empty b{color:#fff}
 
-/* ✅ Fade animation */
+/* Fade */
 .rpc-fade{transition:opacity 220ms ease, transform 220ms ease;}
 .rpc-fade.is-out{opacity:0;transform:translateY(6px);pointer-events:none;}
 .rpc-fade.is-in{opacity:1;transform:translateY(0);}
 
-/* ✅ Pro bullets */
+/* Bullets */
 .rpc-bullets{margin:0;padding-left:18px}
 .rpc-bullets li{margin:6px 0}
 
-/* ✅ Match-score bar */
-.rpc-score{margin-top:10px;padding:12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10)}
-.rpc-score-top{display:flex;justify-content:space-between;align-items:center;font-weight:900;font-size:13px;margin-bottom:8px}
-.rpc-score-bar{height:10px;border-radius:999px;background:rgba(255,255,255,.10);overflow:hidden}
-.rpc-score-fill{height:100%;width:0;border-radius:999px;transition:width 300ms ease, background-color 300ms ease}
-.rpc-score-sub{margin-top:8px;font-size:12.5px;opacity:.9}
+/* Match score bar */
+.rpc-scorecard{margin-top:10px;padding:12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10)}
+.rpc-scorehead{display:flex;align-items:center;justify-content:space-between;font-weight:900;font-size:13px;margin-bottom:8px}
+.rpc-scorebar{height:10px;border-radius:999px;background:rgba(255,255,255,.10);overflow:hidden}
+.rpc-scorefill{
+  height:100%;
+  width:0%;
+  border-radius:999px;
+  transition:width 320ms ease, background-color 320ms ease;
+  background:#38d39f;
+}
+.rpc-scorelabel{margin-top:8px;font-size:12px;opacity:.9}
 
-/* ✅ Nuance note */
-.rpc-note{margin-top:10px;opacity:.92;font-size:12.5px;line-height:1.45}
-
-/* ✅ Share block */
-.rpc-share{margin-top:14px;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03)}
-.rpc-share-title{font-weight:900;font-size:13px;margin-bottom:8px;opacity:.95}
+/* Save / share */
+.rpc-share{margin-top:12px;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.03)}
+.rpc-share-title{font-weight:900;font-size:13px;margin:0 0 10px 0}
 .rpc-share-row{display:flex;gap:10px;align-items:center}
-.rpc-share-input{flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:#0e1420;color:#e9eef5;font-size:12.5px}
+.rpc-share-input{flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:#0f1115;color:#e9eef5}
 .rpc-share-btn{padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.16);background:#2b3344;color:#fff;font-weight:900;cursor:pointer}
 .rpc-share-btn:hover{filter:brightness(.95)}
-.rpc-share-msg{margin-top:8px;font-size:12px;opacity:.9;display:none}
+.rpc-toast{margin-top:8px;font-size:12px;opacity:.9;display:none}
+
+/* Upgrade CTA (ONLY shown when ORANGE) */
+.rpc-upgrade{
+  margin-top:12px;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(247, 201, 72, .10); /* orange tint */
+  display:none;
+}
+.rpc-upgrade strong{display:block;margin-bottom:8px}
+.rpc-upgrade-row{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.rpc-upgrade-btn{
+  padding:10px 12px;
+  border-radius:10px;
+  border:none;
+  background:#f7c948; /* orange */
+  color:#111;
+  font-weight:900;
+  cursor:pointer;
+}
+.rpc-upgrade-btn:hover{filter:brightness(.95)}
+.rpc-upgrade-link{color:#ffd98b;text-decoration:underline;font-weight:800}
 
 @media (max-width:900px){
   .rpc-grid{grid-template-columns:1fr}
   .rpc-checklist{grid-template-columns:1fr}
-  .rpc-share-row{flex-direction:column}
-  .rpc-share-btn{width:100%}
 }
 </style>
 </head>
@@ -93,18 +127,24 @@
         <label class="rpc-check"><input type="checkbox" value="Minecraft"> Minecraft</label>
         <label class="rpc-check"><input type="checkbox" value="League of Legends"> League of Legends</label>
         <label class="rpc-check"><input type="checkbox" value="Rocket League"> Rocket League</label>
+        <label class="rpc-check"><input type="checkbox" value="Overwatch 2"> Overwatch 2</label>
+        <label class="rpc-check"><input type="checkbox" value="Rainbow Six Siege"> Rainbow Six Siege</label>
 
         <div class="rpc-section-title">Gemiddeld (populair)</div>
         <label class="rpc-check"><input type="checkbox" value="Fortnite"> Fortnite</label>
         <label class="rpc-check"><input type="checkbox" value="Valorant"> Valorant</label>
+        <label class="rpc-check"><input type="checkbox" value="CS2"> Counter-Strike 2</label>
         <label class="rpc-check"><input type="checkbox" value="GTA V"> GTA V / FiveM</label>
         <label class="rpc-check"><input type="checkbox" value="Apex Legends"> Apex Legends</label>
+        <label class="rpc-check"><input type="checkbox" value="PUBG"> PUBG</label>
 
         <div class="rpc-section-title">Zwaar / extreem zwaar</div>
         <label class="rpc-check"><input type="checkbox" value="Call of Duty / Warzone"> Call of Duty / Warzone</label>
         <label class="rpc-check"><input type="checkbox" value="Red Dead Redemption 2"> Red Dead Redemption 2</label>
+        <label class="rpc-check"><input type="checkbox" value="Elden Ring"> Elden Ring</label>
         <label class="rpc-check"><input type="checkbox" value="Hogwarts Legacy"> Hogwarts Legacy</label>
         <label class="rpc-check"><input type="checkbox" value="Cyberpunk 2077"> Cyberpunk 2077</label>
+        <label class="rpc-check"><input type="checkbox" value="Starfield"> Starfield</label>
       </div>
 
       <div class="rpc-divider"></div>
@@ -134,22 +174,32 @@
         <h4 class="rpc-title" id="pcName"></h4>
         <div class="rpc-price" id="pcPrice"></div>
 
-        <!-- ✅ Match score -->
-        <div class="rpc-score" aria-label="Match score">
-          <div class="rpc-score-top">
-            <div>Match-score</div>
-            <div id="scoreText">—/100</div>
+        <div class="rpc-scorecard">
+          <div class="rpc-scorehead">
+            <span>Match-score</span>
+            <span id="scoreText">—/100</span>
           </div>
-          <div class="rpc-score-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-            <div class="rpc-score-fill" id="scoreFill"></div>
+          <div class="rpc-scorebar" aria-label="Match score">
+            <div class="rpc-scorefill" id="scoreFill"></div>
           </div>
-          <div class="rpc-score-sub" id="scoreSub">—</div>
+          <div class="rpc-scorelabel" id="scoreLabel">—</div>
         </div>
 
-        <!-- ✅ Waarom -->
-        <div class="rpc-why">
+        <!-- ✅ Upgrade block (ONLY when ORANGE 70–84) -->
+        <div class="rpc-upgrade" id="upgradeBox">
+          <strong>Wil je meer headroom / stabielere FPS?</strong>
+          <div class="rpc-upgrade-row">
+            <span id="upgradeText">—</span>
+            <button class="rpc-upgrade-btn" id="upgradeBtn" type="button">Bekijk betere match</button>
+          </div>
+          <div style="margin-top:8px;font-size:12px;opacity:.9;">
+            Liever persoonlijk? <a class="rpc-upgrade-link" href="https://replay-pc.eu/contactformulier" target="_blank" rel="noopener">Vraag advies op maat</a>
+          </div>
+        </div>
+
+        <div class="rpc-why" style="margin-top:12px;">
           <ul class="rpc-bullets" id="whyBullets"></ul>
-          <div class="rpc-note" id="nuanceNote" style="display:none;"></div>
+          <div class="rpc-note" id="nuanceNote" style="display:none;margin-top:10px;opacity:.92;font-size:12.5px;line-height:1.45"></div>
         </div>
 
         <h5 class="rpc-h5">🎯 Verwachte prestaties (1080p)</h5>
@@ -159,14 +209,13 @@
           <a id="pcLink" class="rpc-link" href="#" target="_blank" rel="noopener">Bekijk deze PC</a>
         </div>
 
-        <!-- ✅ Share / Save -->
         <div class="rpc-share">
-          <div class="rpc-share-title">Opslaan / delen</div>
+          <p class="rpc-share-title">Opslaan / delen</p>
           <div class="rpc-share-row">
-            <input class="rpc-share-input" id="shareLink" type="text" readonly value="" />
+            <input class="rpc-share-input" id="shareUrl" readonly />
             <button class="rpc-share-btn" id="copyBtn" type="button">Kopieer link</button>
           </div>
-          <div class="rpc-share-msg" id="copyMsg">✅ Link gekopieerd!</div>
+          <div class="rpc-toast" id="toast">Gekopieerd ✅</div>
         </div>
 
         <p class="rpc-tip">
@@ -187,51 +236,51 @@
 <script>
 document.addEventListener("DOMContentLoaded",()=>{
 
-  // ==============================
-  //  CONFIG / DATA
-  // ==============================
-
-  // 1 = licht, 2 = gemiddeld, 3 = zwaar, 4 = extreem zwaar
-  // (Deze verdeling voorkomt te snelle upsell: Apex/GTA/Fortnite blijven “gemiddeld”.)
+  // 1=licht, 2=gemiddeld, 3=zwaar, 4=extreem
   const gameWeights = {
     // Licht
     "Roblox": 1,
     "Minecraft": 1,
     "League of Legends": 1,
     "Rocket League": 1,
+    "Overwatch 2": 1,
+    "Rainbow Six Siege": 1,
 
     // Gemiddeld
     "Fortnite": 2,
     "Valorant": 2,
+    "CS2": 2,
     "GTA V": 2,
     "Apex Legends": 2,
+    "PUBG": 2,
 
     // Zwaar
     "Call of Duty / Warzone": 3,
     "Red Dead Redemption 2": 3,
+    "Elden Ring": 3,
 
-    // Extreem zwaar
+    // Extreem
     "Hogwarts Legacy": 4,
-    "Cyberpunk 2077": 4
+    "Cyberpunk 2077": 4,
+    "Starfield": 4
   };
 
-  // Products (later: vul link/prijs aan)
+  // tiers: 0=low(3050), 1=mid(3060Ti), 2=upper(3070/3080), 3=high(3090/5090)
   const products = {
-    budget: {
-      key: "budget",
-      name: "💸 Budget 60FPS",
+    low: {
+      tier: 0,
+      name: "💸 Low (RTX 3050)",
       price: "€—",
       link: "#",
       fps: [
-        "Esports games (LoL/Valorant/RL): 120–200 FPS",
-        "Fortnite / Apex: 80–130 FPS (settings afhankelijk)",
-        "Warzone: 60–90 FPS (settings afhankelijk)",
-        "RDR2: 55–75 FPS (mix settings)"
+        "Esports (LoL/Valorant/CS2/RL): 120–200 FPS",
+        "Fortnite / Apex: 70–120 FPS (settings afhankelijk)",
+        "GTA V / FiveM: 70–110 FPS (settings afhankelijk)"
       ]
     },
-    ignite: {
-      key: "ignite",
-      name: "🔥The Ignite🔥",
+    mid: {
+      tier: 1,
+      name: "🔥 The Ignite (RTX 3060 / 3060 Ti)",
       price: "€650,-",
       link: "https://replay-pc.eu/goedkope-gaming-pc-rtx-3060-ti",
       fps: [
@@ -246,42 +295,35 @@ document.addEventListener("DOMContentLoaded",()=>{
         "Cyberpunk 2077 (High, zonder ray tracing): 70–90 FPS"
       ]
     },
-    highend: {
-      key: "highend",
-      name: "👑 High-End",
+    upper: {
+      tier: 2,
+      name: "⚡ Upper (RTX 3070 / 3080)",
       price: "€—",
       link: "#",
       fps: [
-        "Esports (LoL/Valorant/RL): 240+ FPS",
-        "Fortnite / Apex: 160–240 FPS",
-        "Warzone: 140–190 FPS",
-        "RDR2: 120–160 FPS",
-        "Cyberpunk: 105–150 FPS"
+        "Esports (LoL/Valorant/CS2/RL): 240+ FPS",
+        "Fortnite / Apex: 140–220 FPS",
+        "Warzone: 120–170 FPS (settings afhankelijk)",
+        "RDR2: 100–140 FPS (mix settings)",
+        "Cyberpunk: 90–130 FPS (zonder RT / DLSS afhankelijk)"
+      ]
+    },
+    high: {
+      tier: 3,
+      name: "👑 High (RTX 3090 / later 5090)",
+      price: "€—",
+      link: "#",
+      fps: [
+        "Esports (LoL/Valorant/CS2/RL): 300+ FPS",
+        "Fortnite / Apex: 180–280 FPS",
+        "Warzone: 150–220 FPS (settings afhankelijk)",
+        "RDR2: 120–170 FPS",
+        "Cyberpunk: 110–170 FPS (zonder RT / DLSS afhankelijk)"
       ]
     }
   };
 
-  // Thresholds in "effective need" (maxWeight + modifiers)
-  // Houd ze eenvoudig + logisch:
-  // - budget is vooral voor licht/gemiddeld bij 60fps en competitive
-  // - ignite is “default safe”
-  // - highend voor 144fps of graphics+zwaar
-  const T_BUDGET = 2.4;  // <= budget
-  const T_HIGH   = 3.6;  // <= ignite, daarboven highend
-
-  function fpsModifier(fps){
-    if (fps >= 144) return 1.0;
-    if (fps >= 100) return 0.45;
-    return 0.0; // 60
-  }
-  function styleModifier(style){
-    // graphics is zwaarder (hogere settings)
-    return style === "graphics" ? 0.55 : 0.0;
-  }
-
-  // ==============================
-  //  DOM refs
-  // ==============================
+  // DOM
   const resultBox   = document.getElementById("result");
   const emptyState  = document.getElementById("emptyState");
   const pcNameEl    = document.getElementById("pcName");
@@ -291,26 +333,19 @@ document.addEventListener("DOMContentLoaded",()=>{
   const whyBullets  = document.getElementById("whyBullets");
   const nuanceNote  = document.getElementById("nuanceNote");
 
-  // score UI
   const scoreText   = document.getElementById("scoreText");
   const scoreFill   = document.getElementById("scoreFill");
-  const scoreSub    = document.getElementById("scoreSub");
+  const scoreLabel  = document.getElementById("scoreLabel");
 
-  // share UI
-  const shareLinkEl = document.getElementById("shareLink");
+  const shareUrlEl  = document.getElementById("shareUrl");
   const copyBtn     = document.getElementById("copyBtn");
-  const copyMsg     = document.getElementById("copyMsg");
+  const toast       = document.getElementById("toast");
 
-  // Safety
-  const ok = [resultBox, emptyState, pcNameEl, pcPriceEl, pcLinkEl, pcFpsUl, whyBullets, nuanceNote, scoreText, scoreFill, scoreSub, shareLinkEl, copyBtn, copyMsg].every(Boolean);
-  if (!ok){
-    console.warn("Replay tool: element mist. Check ids.");
-    return;
-  }
+  const upgradeBox  = document.getElementById("upgradeBox");
+  const upgradeText = document.getElementById("upgradeText");
+  const upgradeBtn  = document.getElementById("upgradeBtn");
 
-  // ==============================
-  //  Helpers
-  // ==============================
+  // --- helpers ---
   function getCheckedGames(){
     return [...document.querySelectorAll('#gameList input:checked')].map(i=>i.value);
   }
@@ -324,6 +359,13 @@ document.addEventListener("DOMContentLoaded",()=>{
     let max=0;
     games.forEach(g=>max=Math.max(max, gameWeights[g] || 0));
     return max;
+  }
+  function countWeight(games, w){
+    let c=0;
+    for (const g of games){
+      if ((gameWeights[g]||0) === w) c++;
+    }
+    return c;
   }
   function getTwoHeaviestGames(games){
     const ranked = games
@@ -344,98 +386,158 @@ document.addEventListener("DOMContentLoaded",()=>{
     if (maxW === 3) return "Zwaar";
     return "Extreem zwaar";
   }
-
-  // ==============================
-  //  Decision Logic (what we recommend)
-  // ==============================
-  function chooseProduct(games, fps, style){
-    const maxW = getMaxWeight(games);
-    const eff  = maxW + styleModifier(style) + fpsModifier(fps);
-
-    // Tier from effective "need"
-    if (eff <= T_BUDGET) return products.budget;
-    if (eff <= T_HIGH) return products.ignite;
-    return products.highend;
+  function productByTier(t){
+    if (t <= 0) return products.low;
+    if (t === 1) return products.mid;
+    if (t === 2) return products.upper;
+    return products.high;
+  }
+  function nextTierProduct(p){
+    const t = p.tier + 1;
+    if (t > 3) return null;
+    return productByTier(t);
   }
 
-  // ==============================
-  //  Match-score (requirement-based) + color
-  //  - If chosen product meets need tier => high score
-  //  - If chosen product is above need => still high but slightly less (overkill)
-  //  - If chosen product is below => low (should basically not happen)
-  // ==============================
-  function getTierFromEffective(eff){
-    if (eff <= T_BUDGET) return "budget";
-    if (eff <= T_HIGH)   return "ignite";
-    return "highend";
-  }
-  function tierRank(t){
-    return t === "budget" ? 1 : t === "ignite" ? 2 : 3;
-  }
+  /*
+    ✅ ADVIES-LOGICA (niet te agressief omhoog)
+    - Extreem is NIET automatisch upper; Ignite (mid) is baseline.
+    - Alleen opschalen bij hogere FPS en/of graphics-streng.
+  */
+  function requiredTier(games, fps, style){
+    const w = getMaxWeight(games);
 
-  function computeMatchScore(product, games, fps, style){
-    const maxW = getMaxWeight(games);
-    const eff  = maxW + styleModifier(style) + fpsModifier(fps);
+    // Baseline tiers
+    // licht -> low
+    // gemiddeld -> low (60) / mid (100/144)
+    // zwaar -> mid
+    // extreem -> mid (Ignite)
+    let req = 0;
+    if (w <= 1) req = 0;          // low
+    else if (w === 2) req = 0;    // start low, fps/style bepaalt omhoog
+    else if (w === 3) req = 1;    // mid
+    else req = 1;                 // extreem -> mid baseline
 
-    const needTier = getTierFromEffective(eff);
-    const gotTier  = product.key;
+    // FPS invloed
+    if (fps >= 100 && w >= 2) req = Math.max(req, 1); // 100+ bij gemiddeld+ -> minimaal mid
+    if (fps >= 144 && w >= 2) req = Math.max(req, 2); // 144+ bij gemiddeld+ -> vaak upper
 
-    const needR = tierRank(needTier);
-    const gotR  = tierRank(gotTier);
+    // Zwaar/extreem strenger bij 144+
+    if (fps >= 144 && w >= 3) req = Math.max(req, 2);
 
-    const headroom = gotR - needR; // 0 = perfect
-
-    let score = 96; // default perfect
-
-    if (headroom === 1) score = 92;
-    if (headroom >= 2)  score = 88;
-
-    if (headroom < 0){
-      // too low recommendation
-      score = 55 + headroom * 20;
+    // Graphics is strenger dan competitive
+    if (style === "graphics"){
+      if (fps >= 100 && w >= 3) req = Math.max(req, 2);
+      if (fps >= 144 && w >= 3) req = Math.max(req, 3);
+      if (w >= 4 && fps >= 100) req = Math.max(req, 2);
+      if (w >= 4 && fps >= 144) req = Math.max(req, 3);
     }
 
-    // Nuance: graphics + high fps + very heavy games => slight reduction (not huge)
-    const isVeryHeavy = maxW >= 4;
-    const isStrict = (style === "graphics" && fps >= 100);
-    if (isVeryHeavy && isStrict) score -= 6;
-
-    // Extra nuance: if user wants 144 but games are light, recommending highend is "overkill"
-    // This only triggers if product is highend and need is much lower (already handled by headroom),
-    // but we add a small adjustment for realism.
-    if (product.key === "highend" && maxW <= 2 && fps >= 144) score -= 4;
-
-    score = Math.max(5, Math.min(99, Math.round(score)));
-
-    let label = "Goede match";
-    if (score >= 95) label = "Perfecte match";
-    else if (score >= 88) label = "Sterke match";
-    else if (score >= 75) label = "Goede match";
-    else if (score >= 60) label = "Redelijke match";
-    else label = "Twijfelzone";
-
-    let color = "#ff3b3b"; // red
-    if (score >= 88) color = "#2fe68f"; // green
-    else if (score >= 70) color = "#ffc13b"; // amber
-
-    return { score, label, color, eff, needTier, gotTier };
+    return Math.max(0, Math.min(3, req));
   }
 
-  function renderScore(scoreObj){
-    const { score, label, color } = scoreObj;
+  /*
+    ✅ SCORE (alleen groen/oranje)
+    - Onder 70 tonen we NIET: we upsellen automatisch naar een tier waar het >=70 wordt.
+    - Oranje (70–84) = haalbaar maar niet altijd consistent -> dan tonen we de upsell-knop.
+    - Groen (85+) = top match.
+  */
+  function computeMatchScore(chosen, games, fps, style){
+    const req = requiredTier(games, fps, style);
+    const diff = chosen.tier - req;
+
+    const maxW = getMaxWeight(games);
+    const extremeCount = countWeight(games, 4);
+    const heavyCount = countWeight(games, 3) + extremeCount;
+
+    let score;
+
+    // exact match
+    if (diff === 0){
+      score = 92;
+
+      if (style === "graphics") score -= 3;
+      if (fps === 144) score -= 4;
+      if (maxW >= 3) score -= 4;
+      if (extremeCount >= 1) score -= 4;
+      if (heavyCount >= 3) score -= 4;
+      if (games.length >= 8) score -= 2; // veel games = meer onzekerheid
+    }
+    // overkill (nog steeds prima, maar niet automatisch 100)
+    else if (diff > 0){
+      score = 95 - (diff * 3);
+      if (style === "graphics" && fps >= 144) score -= 2;
+    }
+    // underpowered (zou rood zijn, maar dit pad proberen we te vermijden via auto-upsell)
+    else{
+      score = 65 + (diff * 18); // diff negatief
+      if (fps === 144) score -= 8;
+      if (style === "graphics") score -= 6;
+      if (maxW >= 3) score -= 8;
+      if (extremeCount >= 1) score -= 6;
+    }
+
+    score = Math.max(40, Math.min(100, Math.round(score)));
+    return score;
+  }
+
+  function scoreMeta(score){
+    // GEEN rood tonen
+    if (score >= 85) return { label:"Top match", color:"#38d39f" };     // groen
+    return { label:"Niet altijd consistent", color:"#f7c948" };         // oranje
+  }
+
+  function setScoreUI(score){
+    const meta = scoreMeta(score);
     scoreText.textContent = `${score}/100`;
-    scoreSub.textContent  = label;
-
     scoreFill.style.width = `${score}%`;
-    scoreFill.style.backgroundColor = color;
-
-    const bar = scoreFill.parentElement;
-    if (bar) bar.setAttribute("aria-valuenow", String(score));
+    scoreFill.style.backgroundColor = meta.color;
+    scoreLabel.textContent = meta.label;
+    scoreFill.setAttribute("aria-valuenow", String(score));
   }
 
-  // ==============================
-  //  Fade swap
-  // ==============================
+  function chooseProduct(games, fps, style){
+    // Start met required tier (juiste advies, niet overkill)
+    let product = productByTier(requiredTier(games, fps, style));
+
+    // Zorg: nooit "rood" tonen -> als score < 70, automatisch 1 tier omhoog tot >=70 of max tier
+    let score = computeMatchScore(product, games, fps, style);
+    while (score < 70 && product.tier < 3){
+      product = nextTierProduct(product);
+      score = computeMatchScore(product, games, fps, style);
+    }
+    return product;
+  }
+
+  function buildShareUrl(games, fps, style){
+    const url = new URL(window.location.href);
+    url.searchParams.set("fps", String(fps));
+    url.searchParams.set("style", style);
+    url.searchParams.set("games", games.map(encodeURIComponent).join(","));
+    return url.toString();
+  }
+
+  function applyFromUrl(){
+    const url = new URL(window.location.href);
+    const fps = url.searchParams.get("fps");
+    const style = url.searchParams.get("style");
+    const games = url.searchParams.get("games");
+
+    if (fps){
+      const el = document.querySelector(`input[name="minFps"][value="${fps}"]`);
+      if (el) el.checked = true;
+    }
+    if (style){
+      const el = document.querySelector(`input[name="playStyle"][value="${style}"]`);
+      if (el) el.checked = true;
+    }
+    if (games){
+      const list = games.split(",").map(decodeURIComponent);
+      document.querySelectorAll('#gameList input[type="checkbox"]').forEach(cb => {
+        cb.checked = list.includes(cb.value);
+      });
+    }
+  }
+
   function fadeSwap(updateFn){
     if (resultBox.style.display === "none"){
       updateFn();
@@ -443,7 +545,6 @@ document.addEventListener("DOMContentLoaded",()=>{
       resultBox.classList.add("is-in");
       return;
     }
-
     resultBox.classList.remove("is-in");
     resultBox.classList.add("is-out");
 
@@ -456,59 +557,6 @@ document.addEventListener("DOMContentLoaded",()=>{
     }, 220);
   }
 
-  // ==============================
-  //  Share link
-  // ==============================
-  function buildShareUrl(games, fps, style){
-    const url = new URL(window.location.href);
-    url.searchParams.set("fps", String(fps));
-    url.searchParams.set("style", style);
-    // store values; keep short
-    url.searchParams.set("games", games.map(g => encodeURIComponent(g)).join(","));
-    return url.toString();
-  }
-
-  function applyShareFromUrl(){
-    const url = new URL(window.location.href);
-    const fps = url.searchParams.get("fps");
-    const style = url.searchParams.get("style");
-    const gamesParam = url.searchParams.get("games");
-
-    if (fps){
-      const fpsRadio = document.querySelector(`input[name="minFps"][value="${fps}"]`);
-      if (fpsRadio) fpsRadio.checked = true;
-    }
-    if (style){
-      const stRadio = document.querySelector(`input[name="playStyle"][value="${style}"]`);
-      if (stRadio) stRadio.checked = true;
-    }
-    if (gamesParam){
-      const decoded = gamesParam.split(",").map(s => decodeURIComponent(s));
-      const set = new Set(decoded);
-      document.querySelectorAll('#gameList input[type="checkbox"]').forEach(cb => {
-        cb.checked = set.has(cb.value);
-      });
-    }
-  }
-
-  copyBtn.addEventListener("click", async () => {
-    try{
-      await navigator.clipboard.writeText(shareLinkEl.value || window.location.href);
-      copyMsg.style.display = "block";
-      setTimeout(() => copyMsg.style.display = "none", 1200);
-    } catch (e){
-      // fallback
-      shareLinkEl.focus();
-      shareLinkEl.select();
-      document.execCommand("copy");
-      copyMsg.style.display = "block";
-      setTimeout(() => copyMsg.style.display = "none", 1200);
-    }
-  });
-
-  // ==============================
-  //  Render
-  // ==============================
   function render(product, games, fps, style){
     const maxW = getMaxWeight(games);
     const cat  = categoryLabel(maxW);
@@ -516,47 +564,48 @@ document.addEventListener("DOMContentLoaded",()=>{
     const g1 = top2[0] || "—";
     const g2 = top2[1] || "—";
 
-    // header
     pcNameEl.textContent  = product.name;
     pcPriceEl.textContent = product.price;
     pcLinkEl.href         = product.link;
     pcLinkEl.textContent  = `Bekijk ${product.name}`;
 
-    // match score
-    const scoreObj = computeMatchScore(product, games, fps, style);
-    renderScore(scoreObj);
+    const score = computeMatchScore(product, games, fps, style);
+    setScoreUI(score);
 
-    // bullets
+    // ✅ Upgrade box: ALLEEN oranje (70–84) + next tier bestaat
+    const up = nextTierProduct(product);
+    if (score < 85 && up){
+      upgradeBox.style.display = "block";
+      upgradeText.textContent =
+        `Kies ${up.name} als je ${fps}+ FPS stabieler wilt halen (minder afhankelijk van maps/updates/settings).`;
+      upgradeBtn.onclick = () => {
+        fadeSwap(() => render(up, games, fps, style));
+      };
+    } else {
+      upgradeBox.style.display = "none";
+      upgradeBtn.onclick = null;
+    }
+
     whyBullets.innerHTML = "";
-    const bullets = [
+    [
       `Zwaarste games in jouw selectie: “${g1}” en “${g2}”.`,
       `Jouw doel: ${fps}+ FPS op 1080p.`,
-      `Speelstijl: ${style === "competitive" ? "Competitief (hoge FPS, lagere settings)" : "Mooie graphics (hogere settings)"}.`
-    ];
-    bullets.forEach(t=>{
+      `Speelstijl: ${style === "competitive" ? "Competitief (hoge FPS, lagere settings)" : "Mooie graphics (hogere settings)"} — categorie: ${cat}.`
+    ].forEach(t=>{
       const li=document.createElement("li");
       li.textContent=t;
       whyBullets.appendChild(li);
     });
 
-    // nuance note (alleen wanneer relevant)
+    // ✅ Oranje uitleg duidelijk (jij wilde: “haalbaar maar niet consistent” + upsell eerlijk)
     nuanceNote.style.display = "none";
     nuanceNote.textContent = "";
-
-    // Professional nuance triggers
-    if (product.key === "budget" && maxW >= 2){
-      nuanceNote.textContent = `Tip: dit is een budgetadvies voor 60+ FPS. In Fortnite/Apex kan de FPS per map/setting verschillen. Wil je stabieler, kies Ignite of vraag ons om advies op maat. (Categorie: ${cat})`;
-      nuanceNote.style.display = "block";
-    } else if (product.key === "ignite" && maxW >= 4 && style === "graphics" && fps >= 100){
-      nuanceNote.textContent = `Tip: bij zware singleplayer games kan 100+ FPS op hoge settings lastig zijn. Wil je echt ‘altijd’ 100+ FPS, kies liever High-End of vraag ons om advies op maat. (Categorie: ${cat})`;
-      nuanceNote.style.display = "block";
-    } else {
-      // show category as small pro detail
-      nuanceNote.textContent = `Categorie van je zwaarste game: ${cat}.`;
+    if (score < 85){
+      nuanceNote.textContent =
+        "🟡 Dit is haalbaar, maar niet altijd consistent (settings/updates/drukke maps kunnen invloed hebben). Voor stabielere FPS is één tier hoger de veiligere keuze.";
       nuanceNote.style.display = "block";
     }
 
-    // fps list
     pcFpsUl.innerHTML = "";
     product.fps.forEach(line=>{
       const li=document.createElement("li");
@@ -564,10 +613,8 @@ document.addEventListener("DOMContentLoaded",()=>{
       pcFpsUl.appendChild(li);
     });
 
-    // share link
-    shareLinkEl.value = buildShareUrl(games, fps, style);
+    shareUrlEl.value = buildShareUrl(games, fps, style);
 
-    // show
     emptyState.style.display="none";
     resultBox.style.display="block";
   }
@@ -593,20 +640,25 @@ document.addEventListener("DOMContentLoaded",()=>{
     }
 
     const chosen = chooseProduct(games, fps, style);
-
-    fadeSwap(() => {
-      render(chosen, games, fps, style);
-    });
+    fadeSwap(() => render(chosen, games, fps, style));
   }
 
-  // Apply share params (if any), then update
-  applyShareFromUrl();
+  copyBtn.addEventListener("click", async () => {
+    try{
+      await navigator.clipboard.writeText(shareUrlEl.value);
+      toast.style.display = "block";
+      setTimeout(()=> toast.style.display = "none", 1200);
+    }catch(e){
+      alert("Kopiëren lukt niet. Selecteer de link en kopieer handmatig.");
+    }
+  });
 
   document.getElementById("gameList").addEventListener("change", update);
   document.getElementById("fpsPick").addEventListener("change", update);
   document.getElementById("stylePick").addEventListener("change", update);
 
-  update(); // init
+  applyFromUrl();
+  update();
 
 });
 </script>
